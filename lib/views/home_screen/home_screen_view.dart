@@ -32,7 +32,7 @@ class HomeScreenView extends StatelessWidget {
                   width: SizeUtils.getWidth(context) * 0.9,
                   height: SizeUtils.getHeight(context) * 0.08,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Color.fromRGBO(102, 137, 131, 1),
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(
@@ -52,7 +52,7 @@ class HomeScreenView extends StatelessWidget {
                   padding: const EdgeInsets.all(20),
                   width: SizeUtils.getWidth(context) * 0.9,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: const Color.fromRGBO(102, 137, 131, 1),
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(

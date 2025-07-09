@@ -48,7 +48,8 @@ class HomeView extends StatelessWidget {
               labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
               destinations: const [
                 NavigationDestination(
-                  icon: Icon(Icons.home, color: Colors.white),
+                  icon:
+                      Icon(Icons.home, color: Color.fromRGBO(217, 217, 217, 1)),
                   label: 'Home',
                   selectedIcon: Icon(
                     Icons.home,
@@ -56,7 +57,8 @@ class HomeView extends StatelessWidget {
                   ),
                 ),
                 NavigationDestination(
-                  icon: Icon(Icons.category_rounded, color: Colors.white),
+                  icon: Icon(Icons.category_rounded,
+                      color: Color.fromRGBO(217, 217, 217, 1)),
                   label: 'Service',
                   selectedIcon: Icon(
                     Icons.category_rounded,
@@ -64,7 +66,8 @@ class HomeView extends StatelessWidget {
                   ),
                 ),
                 NavigationDestination(
-                  icon: Icon(Icons.history_rounded, color: Colors.white),
+                  icon: Icon(Icons.history_rounded,
+                      color: Color.fromRGBO(217, 217, 217, 1)),
                   label: 'History',
                   selectedIcon: Icon(
                     Icons.history_rounded,
@@ -72,7 +75,8 @@ class HomeView extends StatelessWidget {
                   ),
                 ),
                 NavigationDestination(
-                  icon: Icon(Icons.account_circle, color: Colors.white),
+                  icon: Icon(Icons.account_circle,
+                      color: Color.fromRGBO(217, 217, 217, 1)),
                   label: 'Profile',
                   selectedIcon: Icon(
                     Icons.account_circle,
@@ -82,7 +86,7 @@ class HomeView extends StatelessWidget {
               ],
               selectedIndex: index,
               indicatorColor: Colors.transparent,
-              backgroundColor: const Color(0xffFFB200),
+              backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
               onDestinationSelected: (index) {
                 context.read<HomeCubit>().setSelected(index);
               },

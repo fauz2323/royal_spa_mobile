@@ -8,7 +8,7 @@ class HistoryView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('History'),
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xfff8f8f8),
         foregroundColor: Colors.black,
         elevation: 0,
         automaticallyImplyLeading: false,
@@ -21,7 +21,7 @@ class HistoryView extends StatelessWidget {
             margin: const EdgeInsets.only(bottom: 12),
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: const Color.fromRGBO(102, 137, 131, 1),
               borderRadius: BorderRadius.circular(8),
               boxShadow: [
                 BoxShadow(
@@ -95,7 +95,7 @@ class HistoryView extends StatelessWidget {
                         // Add detail functionality here
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
+                        backgroundColor: const Color.fromRGBO(166, 138, 100, 1),
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 8),
