@@ -103,7 +103,7 @@ class LoginView extends StatelessWidget {
               // Login Button
               ElevatedButton(
                 onPressed: () {
-                  // TODO: Implement login logic
+                  Navigator.pushNamed(context, '/home');
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green[600],
