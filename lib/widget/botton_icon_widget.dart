@@ -5,14 +5,17 @@ class BottonIconWidget extends StatelessWidget {
     super.key,
     required this.title,
     required this.icon,
+    this.onTap,
   });
 
   final String title;
   final IconData icon;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return GestureDetector(
+      onTap: onTap,
       child: Column(
         children: [
           Icon(icon, size: 25),

@@ -21,16 +21,8 @@ class HistoryView extends StatelessWidget {
             margin: const EdgeInsets.only(bottom: 12),
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: const Color.fromRGBO(102, 137, 131, 1),
+              color: const Color(0xFF4CAF50).withOpacity(0.1),
               borderRadius: BorderRadius.circular(8),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.1),
-                  spreadRadius: 1,
-                  blurRadius: 3,
-                  offset: const Offset(0, 1),
-                ),
-              ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,14 +42,14 @@ class HistoryView extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Colors.green,
+                        color: Colors.black,
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Date Created: ${DateTime.now().subtract(Duration(days: index)).toString().split(' ')[0]}',
+                  'Date Orders: ${DateTime.now().subtract(Duration(days: index)).toString().split(' ')[0]}',
                   style: const TextStyle(
                     fontSize: 14,
                     color: Colors.grey,
@@ -95,7 +87,7 @@ class HistoryView extends StatelessWidget {
                         // Add detail functionality here
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromRGBO(166, 138, 100, 1),
+                        backgroundColor: Colors.green,
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 8),

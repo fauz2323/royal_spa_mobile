@@ -30,7 +30,7 @@ class ProfileView extends StatelessWidget {
         child: Column(
           children: [
             // Profile Header
-            _buildProfileHeader(),
+            _buildProfileHeader(context),
             const SizedBox(height: 24),
 
             // Profile Menu Items
@@ -41,7 +41,7 @@ class ProfileView extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileHeader() {
+  Widget _buildProfileHeader(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -101,21 +101,27 @@ class ProfileView extends StatelessWidget {
           const SizedBox(height: 16),
 
           // Edit Profile Button
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            decoration: BoxDecoration(
-              color: const Color(0xFF4CAF50),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: const Center(
-              child: Text(
-                'Edit Profile',
-                style: TextStyle(
-                  fontFamily: 'Hanken',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
+          GestureDetector(
+            onTap: () {
+              // Navigate to edit profile page
+              Navigator.pushNamed(context, '/edit_profile');
+            },
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              decoration: BoxDecoration(
+                color: const Color(0xFF4CAF50),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Center(
+                child: Text(
+                  'Edit Profile',
+                  style: TextStyle(
+                    fontFamily: 'Hanken',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
@@ -152,16 +158,6 @@ class ProfileView extends StatelessWidget {
           _buildDivider(),
           ProfileMenuWidget(
             isLogout: false,
-            icon: Icons.favorite,
-            title: 'Favorite Services',
-            subtitle: 'Your preferred spa treatments',
-            onTap: () {
-              // Navigate to favorite services
-            },
-          ),
-          _buildDivider(),
-          ProfileMenuWidget(
-            isLogout: false,
             icon: Icons.notifications,
             title: 'Notifications',
             subtitle: 'Manage your notifications',
@@ -187,6 +183,7 @@ class ProfileView extends StatelessWidget {
             subtitle: 'App version and information',
             onTap: () {
               // Navigate to about page
+              Navigator.pushNamed(context, '/about');
             },
           ),
           _buildDivider(),

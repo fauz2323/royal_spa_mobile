@@ -32,15 +32,9 @@ class HomeScreenView extends StatelessWidget {
                   width: SizeUtils.getWidth(context) * 0.9,
                   height: SizeUtils.getHeight(context) * 0.08,
                   decoration: BoxDecoration(
-                    color: Color.fromRGBO(102, 137, 131, 1),
+                    border: Border.all(color: Colors.green, width: 2),
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.1),
-                        blurRadius: 10,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
                   ),
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -52,7 +46,7 @@ class HomeScreenView extends StatelessWidget {
                   padding: const EdgeInsets.all(20),
                   width: SizeUtils.getWidth(context) * 0.9,
                   decoration: BoxDecoration(
-                    color: const Color.fromRGBO(102, 137, 131, 1),
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(
@@ -62,7 +56,7 @@ class HomeScreenView extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: const Column(
+                  child: Column(
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -70,19 +64,22 @@ class HomeScreenView extends StatelessWidget {
                           BottonIconWidget(
                             title: "Services",
                             icon: Icons.category_rounded,
+                            onTap: () {
+                              Navigator.pushNamed(context, '/services');
+                            },
                           ),
-                          BottonIconWidget(
+                          const BottonIconWidget(
                             title: "Leader Board",
                             icon: Icons.leaderboard_rounded,
                           ),
-                          BottonIconWidget(
+                          const BottonIconWidget(
                             title: "History",
                             icon: Icons.history_rounded,
                           )
                         ],
                       ),
-                      SizedBox(height: 30),
-                      Row(
+                      const SizedBox(height: 30),
+                      const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           BottonIconWidget(
@@ -97,10 +94,21 @@ class HomeScreenView extends StatelessWidget {
                       )
                     ],
                   ),
+                ),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.all(20),
+                    child: Text(
+                      "Upcoming Events",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ),
                 )
               ],
             ),
-          )
+          ),
         ],
       ),
     );
