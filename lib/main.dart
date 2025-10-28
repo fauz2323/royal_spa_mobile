@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       title: 'Royal Spa Garden',
       theme: ThemeData(
         useMaterial3: true,
-        fontFamily: 'Hanken',
+        textTheme: GoogleFonts.poppinsTextTheme(),
         scaffoldBackgroundColor: const Color.fromARGB(255, 237, 237, 237),
       ),
       routes: RouteUtils.routes,
