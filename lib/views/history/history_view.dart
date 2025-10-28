@@ -8,7 +8,7 @@ class HistoryView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('History'),
-        backgroundColor: const Color(0xfff8f8f8),
+        backgroundColor: Colors.transparent,
         foregroundColor: Colors.black,
         elevation: 0,
         automaticallyImplyLeading: false,
@@ -21,7 +21,7 @@ class HistoryView extends StatelessWidget {
             margin: const EdgeInsets.only(bottom: 12),
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: const Color(0xFF4CAF50).withOpacity(0.1),
+              color: Colors.white,
               borderRadius: BorderRadius.circular(8),
             ),
             child: Column(
@@ -61,14 +61,6 @@ class HistoryView extends StatelessWidget {
                   height: 120,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        spreadRadius: 1,
-                        blurRadius: 3,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),

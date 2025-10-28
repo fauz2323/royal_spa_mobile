@@ -15,10 +15,7 @@ class ServiceCardWidget extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.all(7),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            color: Colors.green.withValues(
-              alpha: 0.1,
-            )),
+            borderRadius: BorderRadius.circular(15), color: Colors.white),
         child: Column(
           children: [
             ClipRRect(

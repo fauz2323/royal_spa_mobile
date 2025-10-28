@@ -139,6 +139,7 @@ class ProfileView extends StatelessWidget {
             subtitle: 'View your past appointments',
             onTap: () {
               // Navigate to booking history
+              Navigator.pushNamed(context, '/history');
             },
           ),
           _buildDivider(),
