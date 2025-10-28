@@ -61,9 +61,12 @@ class HomeScreenView extends StatelessWidget {
                               Navigator.pushNamed(context, '/services');
                             },
                           ),
-                          const BottonIconWidget(
+                          BottonIconWidget(
                             title: "Leader Board",
                             icon: Icons.leaderboard_rounded,
+                            onTap: () {
+                              Navigator.pushNamed(context, '/leaderboard');
+                            },
                           ),
                           BottonIconWidget(
                             title: "History",

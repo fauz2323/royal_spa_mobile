@@ -88,7 +88,7 @@ class LoginView extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: () {
-                    // TODO: Navigate to forgot password screen
+                    Navigator.pushNamed(context, '/forgot_password');
                   },
                   child: Text(
                     'Forgot Password?',
