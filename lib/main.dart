@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         fontFamily: 'Hanken',
-        scaffoldBackgroundColor: const Color(0xfff8f8f8),
+        scaffoldBackgroundColor: const Color.fromARGB(255, 237, 237, 237),
       ),
       routes: RouteUtils.routes,
       initialRoute: '/login',

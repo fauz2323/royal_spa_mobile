@@ -8,7 +8,6 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(217, 217, 217, 1),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -48,8 +47,8 @@ class LoginView extends StatelessWidget {
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(
-                        color: const Color.fromRGBO(102, 137, 131, 1)!),
+                    borderSide: const BorderSide(
+                        color: Color.fromRGBO(102, 137, 131, 1)),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -73,7 +72,8 @@ class LoginView extends StatelessWidget {
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: Colors.grey[300]!),
+                    borderSide: const BorderSide(
+                        color: Color.fromRGBO(102, 137, 131, 1)),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -107,7 +107,7 @@ class LoginView extends StatelessWidget {
                   Navigator.pushNamed(context, '/home');
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromRGBO(166, 138, 100, 1),
+                  backgroundColor: Colors.green,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(

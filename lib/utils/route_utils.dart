@@ -4,6 +4,7 @@ import 'package:royal_spa_garden_mobile/views/edit_profile/edit_profile_view.dar
 import 'package:royal_spa_garden_mobile/views/home/home_view.dart';
 import 'package:royal_spa_garden_mobile/views/login/login_view.dart';
 import 'package:royal_spa_garden_mobile/views/profile/profile_view.dart';
+import 'package:royal_spa_garden_mobile/views/qna/qna_view.dart';
 import 'package:royal_spa_garden_mobile/views/register/register_view.dart';
 import 'package:royal_spa_garden_mobile/views/service/service_view.dart';
 import 'package:royal_spa_garden_mobile/views/service_detail/service_detail_view.dart';
@@ -18,5 +19,6 @@ class RouteUtils {
     '/service_detail': (context) => const ServiceDetailView(),
     '/about': (context) => const AboutView(),
     '/edit_profile': (context) => const EditProfileView(),
+    '/qna': (context) => const QnaView(),
   };
 }

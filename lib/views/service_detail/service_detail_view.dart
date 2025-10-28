@@ -225,28 +225,6 @@ class ServiceDetailView extends StatelessWidget {
           child: Row(
             children: [
               // Tombol Hubungi
-              Expanded(
-                flex: 1,
-                child: OutlinedButton.icon(
-                  onPressed: () {
-                    // Aksi untuk menghubungi
-                  },
-                  icon: const Icon(Icons.phone, color: Colors.green),
-                  label: const Text(
-                    'Hubungi',
-                    style: TextStyle(color: Colors.green),
-                  ),
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Colors.green),
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                ),
-              ),
-
-              const SizedBox(width: 12),
 
               // Tombol Booking
               Expanded(

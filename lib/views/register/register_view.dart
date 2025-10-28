@@ -14,6 +14,7 @@ class _RegisterViewState extends State<RegisterView> {
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _telpController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
@@ -24,6 +25,7 @@ class _RegisterViewState extends State<RegisterView> {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    _telpController.dispose();
     super.dispose();
   }
 
@@ -86,7 +88,23 @@ class _RegisterViewState extends State<RegisterView> {
                 },
               ),
               const SizedBox(height: 20),
-
+              TextFormField(
+                controller: _telpController,
+                decoration: InputDecoration(
+                  labelText: 'Phone Number',
+                  prefixIcon: const Icon(Icons.phone),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter phone number';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20),
               // Email Field
               TextFormField(
                 controller: _emailController,
@@ -192,7 +210,7 @@ class _RegisterViewState extends State<RegisterView> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: Colors.green,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
@@ -230,7 +248,7 @@ class _RegisterViewState extends State<RegisterView> {
                       style: GoogleFonts.poppins(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
-                        color: Colors.blue,
+                        color: Colors.green.withValues(alpha: 0.7),
                       ),
                     ),
                   ),

@@ -47,13 +47,6 @@ class ProfileView extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
       ),
       child: Column(
         children: [
@@ -136,13 +129,6 @@ class ProfileView extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
       ),
       child: Column(
         children: [
@@ -173,6 +159,7 @@ class ProfileView extends StatelessWidget {
             subtitle: 'Get help and contact support',
             onTap: () {
               // Navigate to help and support
+              Navigator.pushNamed(context, '/qna');
             },
           ),
           _buildDivider(),
