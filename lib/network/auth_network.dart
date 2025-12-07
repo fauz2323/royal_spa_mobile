@@ -9,7 +9,7 @@ import 'package:royal_spa_garden_mobile/model/profile_model.dart';
 import 'package:royal_spa_garden_mobile/model/register_model.dart';
 
 class AuthNetwork {
-  Future<Either<Exception, RegisterModel>> registerUser(
+  Future<Either<NetworkModel, RegisterModel>> registerUser(
       RegisterDto registerDto) async {
     Map body = {
       'name': registerDto.name,
@@ -35,10 +35,14 @@ class AuthNetwork {
       final registerModel = RegisterModel.fromJson(jsonData);
       return Right(registerModel);
     }
-    return Left(Exception(jsonData['message'] ?? 'Registration failed'));
+    return Left(
+      NetworkModel(
+          statusCode: response.statusCode,
+          message: jsonData['message'] ?? 'Registration failed'),
+    );
   }
 
-  Future<Either<Exception, LoginModel>> loginUser(LoginDto loginDto) async {
+  Future<Either<NetworkModel, LoginModel>> loginUser(LoginDto loginDto) async {
     Map body = {
       'email': loginDto.email,
       'password': loginDto.password,
@@ -61,7 +65,11 @@ class AuthNetwork {
       final loginModel = LoginModel.fromJson(jsonData);
       return Right(loginModel);
     }
-    return Left(Exception(jsonData['message'] ?? 'Login failed'));
+    return Left(
+      NetworkModel(
+          statusCode: response.statusCode,
+          message: jsonData['message'] ?? 'Login failed'),
+    );
   }
 
   Future<Either<NetworkModel, ProfileModel>> profile(String token) async {

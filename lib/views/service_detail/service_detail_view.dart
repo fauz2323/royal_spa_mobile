@@ -1,210 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:royal_spa_garden_mobile/arguments/service_detail_argument.dart';
+import 'package:royal_spa_garden_mobile/model/service_spa_detail_model.dart';
+import 'package:royal_spa_garden_mobile/views/service_detail/cubit/service_detail_cubit.dart';
 
 class ServiceDetailView extends StatelessWidget {
   const ServiceDetailView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)!.settings.arguments as ServiceDetailArgument;
+
+    return BlocProvider(
+      create: (context) => ServiceDetailCubit()..initial(args.serviceId),
+      child: Builder(builder: (context) {
+        return _build(context);
+      }),
+    );
+  }
+
+  Widget _build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: CustomScrollView(
-        slivers: [
-          // App Bar dengan gambar
-          SliverAppBar(
-            expandedHeight: 300,
-            pinned: true,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/spa.jpg'),
-                    fit: BoxFit.cover,
+      body: BlocConsumer<ServiceDetailCubit, ServiceDetailState>(
+        listener: (context, state) {
+          state.maybeMap(
+              orElse: () {},
+              unauthorized: (_) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Unauthorized access. Please log in."),
                   ),
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.transparent,
-                        Colors.black.withOpacity(0.3),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+                );
+
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/login',
+                  (Route<dynamic> route) => false,
+                );
+              });
+        },
+        builder: (context, state) {
+          return state.maybeWhen(
+            orElse: () => Container(),
+            loading: () => const Center(
+              child: CircularProgressIndicator(),
             ),
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.white),
-              onPressed: () => Navigator.pop(context),
+            loaded: (data) => _loaded(context, data),
+            error: (message) => Center(
+              child: Text("Error: $message"),
             ),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.favorite_border, color: Colors.white),
-                onPressed: () {
-                  // Aksi untuk favorite
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.share, color: Colors.white),
-                onPressed: () {
-                  // Aksi untuk share
-                },
-              ),
-            ],
-          ),
-
-          // Konten detail service
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Title dan Rating
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          'Service Spa A',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineSmall
-                              ?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87,
-                              ),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: Colors.orange.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.star,
-                                color: Colors.orange, size: 16),
-                            const SizedBox(width: 4),
-                            Text(
-                              '4.8',
-                              style: TextStyle(
-                                color: Colors.orange.shade700,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  // Harga
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.green.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.green.withOpacity(0.3)),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(Icons.local_offer, color: Colors.green.shade600),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Harga:',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.green.shade700,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const Spacer(),
-                        Text(
-                          'Rp 100.000',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.green.shade700,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  // Deskripsi
-                  Text(
-                    'Deskripsi',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. '
-                    '\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. '
-                    '\n\nSed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          height: 1.6,
-                          color: Colors.black54,
-                        ),
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  // Fasilitas
-                  Text(
-                    'Fasilitas Termasuk',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
-                  ),
-                  const SizedBox(height: 12),
-                  _buildFacilityItem(Icons.spa, 'Aromaterapi'),
-                  _buildFacilityItem(Icons.hot_tub, 'Hot Stone Massage'),
-                  _buildFacilityItem(Icons.local_drink, 'Welcome Drink'),
-                  _buildFacilityItem(Icons.wifi, 'Free WiFi'),
-                  _buildFacilityItem(Icons.local_parking, 'Parkir Gratis'),
-
-                  const SizedBox(height: 24),
-
-                  // Durasi dan Info tambahan
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade50,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Column(
-                      children: [
-                        _buildInfoRow(Icons.schedule, 'Durasi', '90 Menit'),
-                        const SizedBox(height: 12),
-                        _buildInfoRow(
-                            Icons.location_on, 'Lokasi', 'Royal Spa Center'),
-                        const SizedBox(height: 12),
-                        _buildInfoRow(
-                            Icons.phone, 'Kontak', '+62 812-3456-7890'),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 100), // Spacing untuk bottom button
-                ],
-              ),
-            ),
-          ),
-        ],
+          );
+        },
       ),
 
       // Bottom Button
@@ -256,6 +103,203 @@ class ServiceDetailView extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  CustomScrollView _loaded(BuildContext context, ServiceSpaDetailModel data) {
+    return CustomScrollView(
+      slivers: [
+        // App Bar dengan gambar
+        SliverAppBar(
+          expandedHeight: 300,
+          pinned: true,
+          flexibleSpace: FlexibleSpaceBar(
+            background: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage(data.data.image),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.transparent,
+                      Colors.black.withOpacity(0.3),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.pop(context),
+          ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.favorite_border, color: Colors.white),
+              onPressed: () {
+                // Aksi untuk favorite
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.share, color: Colors.white),
+              onPressed: () {
+                // Aksi untuk share
+              },
+            ),
+          ],
+        ),
+
+        // Konten detail service
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Title dan Rating
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        data.data.name,
+                        style:
+                            Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87,
+                                ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.orange.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.star,
+                              color: Colors.orange, size: 16),
+                          const SizedBox(width: 4),
+                          Text(
+                            '4.8',
+                            style: TextStyle(
+                              color: Colors.orange.shade700,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 16),
+
+                // Harga
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.green.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.green.withOpacity(0.3)),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.local_offer, color: Colors.green.shade600),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Harga:',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.green.shade700,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const Spacer(),
+                      Text(
+                        'Rp ${data.data.price}',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.green.shade700,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+
+                // Deskripsi
+                Text(
+                  'Deskripsi',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  data.data.description ?? 'No description available.',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        height: 1.6,
+                        color: Colors.black54,
+                      ),
+                ),
+
+                const SizedBox(height: 24),
+
+                // Fasilitas
+                Text(
+                  'Fasilitas Termasuk',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                ),
+                const SizedBox(height: 12),
+                _buildFacilityItem(Icons.spa, 'Aromaterapi'),
+                _buildFacilityItem(Icons.hot_tub, 'Hot Stone Massage'),
+                _buildFacilityItem(Icons.local_drink, 'Welcome Drink'),
+                _buildFacilityItem(Icons.wifi, 'Free WiFi'),
+                _buildFacilityItem(Icons.local_parking, 'Parkir Gratis'),
+
+                const SizedBox(height: 24),
+
+                // Durasi dan Info tambahan
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade50,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Column(
+                    children: [
+                      _buildInfoRow(Icons.schedule, 'Durasi', '90 Menit'),
+                      const SizedBox(height: 12),
+                      _buildInfoRow(
+                          Icons.location_on, 'Lokasi', 'Royal Spa Center'),
+                      const SizedBox(height: 12),
+                      _buildInfoRow(Icons.phone, 'Kontak', '+62 812-3456-7890'),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 100), // Spacing untuk bottom button
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 
