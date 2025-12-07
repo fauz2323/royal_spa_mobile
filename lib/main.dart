@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color.fromARGB(255, 237, 237, 237),
       ),
       routes: RouteUtils.routes,
-      initialRoute: '/login',
+      initialRoute: '/splash',
     );
   }
 }

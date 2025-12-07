@@ -11,9 +11,11 @@ import 'package:royal_spa_garden_mobile/views/qna/qna_view.dart';
 import 'package:royal_spa_garden_mobile/views/register/register_view.dart';
 import 'package:royal_spa_garden_mobile/views/service/service_view.dart';
 import 'package:royal_spa_garden_mobile/views/service_detail/service_detail_view.dart';
+import 'package:royal_spa_garden_mobile/views/splash/splash_view.dart';
 
 class RouteUtils {
   static Map<String, Widget Function(BuildContext)> routes = {
+    '/splash': (context) => const SplashView(),
     '/login': (context) => const LoginView(),
     '/register': (context) => const RegisterView(),
     '/forgot_password': (context) => const ForgotPasswordView(),
