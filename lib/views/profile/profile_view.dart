@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:royal_spa_garden_mobile/model/profile_model.dart';
+import 'package:royal_spa_garden_mobile/views/profile/cubit/profile_cubit.dart';
 import 'package:royal_spa_garden_mobile/widget/profile_menu_widget.dart';
 
 class ProfileView extends StatelessWidget {
@@ -6,42 +9,58 @@ class ProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xfff8f8f8),
-      appBar: AppBar(
-        title: const Text(
-          'Profile',
-          style: TextStyle(
-            fontFamily: 'Hanken',
-            fontWeight: FontWeight.w600,
-            color: Colors.black87,
-          ),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black87),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            // Profile Header
-            _buildProfileHeader(context),
-            const SizedBox(height: 24),
-
-            // Profile Menu Items
-            _buildProfileMenuItems(context),
-          ],
-        ),
+    return BlocProvider(
+      create: (context) => ProfileCubit()..initial(),
+      child: Builder(
+        builder: (context) {
+          return _build(context);
+        },
       ),
     );
   }
 
-  Widget _buildProfileHeader(BuildContext context) {
+  Widget _build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xfff8f8f8),
+      body: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: BlocConsumer<ProfileCubit, ProfileState>(
+            listener: (context, state) {
+              // TODO: implement listener
+            },
+            builder: (context, state) {
+              return state.maybeWhen(
+                orElse: () => Container(),
+                loading: () => const Center(
+                  child: CircularProgressIndicator(),
+                ),
+                loaded: (user) => _loaded(context, user),
+                error: (message) => Center(
+                  child: Text(
+                    'Error: $message',
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                ),
+              );
+            },
+          )),
+    );
+  }
+
+  Widget _loaded(BuildContext context, ProfileModel user) {
+    return Column(
+      children: [
+        // Profile Header
+        _buildProfileHeader(context, user),
+        const SizedBox(height: 24),
+
+        // Profile Menu Items
+        _buildProfileMenuItems(context),
+      ],
+    );
+  }
+
+  Widget _buildProfileHeader(BuildContext context, ProfileModel user) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -71,9 +90,9 @@ class ProfileView extends StatelessWidget {
           const SizedBox(height: 16),
 
           // User Name
-          const Text(
-            'John Doe',
-            style: TextStyle(
+          Text(
+            user.data.user.name,
+            style: const TextStyle(
               fontFamily: 'Hanken',
               fontSize: 24,
               fontWeight: FontWeight.w600,
@@ -83,9 +102,9 @@ class ProfileView extends StatelessWidget {
           const SizedBox(height: 4),
 
           // User Email
-          const Text(
-            'john.doe@example.com',
-            style: TextStyle(
+          Text(
+            user.data.user.email,
+            style: const TextStyle(
               fontFamily: 'Hanken',
               fontSize: 16,
               color: Colors.grey,

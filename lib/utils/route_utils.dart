@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:royal_spa_garden_mobile/views/about/about_view.dart';
+import 'package:royal_spa_garden_mobile/views/booking_page/booking_page_view.dart';
 import 'package:royal_spa_garden_mobile/views/edit_profile/edit_profile_view.dart';
 import 'package:royal_spa_garden_mobile/views/forgot_password/forgot_password_view.dart';
 import 'package:royal_spa_garden_mobile/views/history/history_view.dart';
@@ -22,11 +23,12 @@ class RouteUtils {
     '/home': (context) => const HomeView(),
     '/profile': (context) => const ProfileView(),
     '/services': (context) => const ServiceView(),
-    '/service_detail': (context) => const ServiceDetailView(),
+    '/service_detail': (context) => ServiceDetailView(),
     '/about': (context) => const AboutView(),
     '/edit_profile': (context) => const EditProfileView(),
     '/qna': (context) => const QnaView(),
     '/history': (context) => const HistoryView(),
     '/leaderboard': (context) => const LeaderboardView(),
+    '/booking_page': (context) => const BookingPageView(),
   };
 }

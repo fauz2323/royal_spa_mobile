@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'service_detail_cubit.dart';
+part of 'profile_cubit.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -13,11 +13,11 @@ part of 'service_detail_cubit.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$ServiceDetailState {
+mixin _$ProfileState {
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is ServiceDetailState);
+        (other.runtimeType == runtimeType && other is ProfileState);
   }
 
   @override
@@ -25,18 +25,17 @@ mixin _$ServiceDetailState {
 
   @override
   String toString() {
-    return 'ServiceDetailState()';
+    return 'ProfileState()';
   }
 }
 
 /// @nodoc
-class $ServiceDetailStateCopyWith<$Res> {
-  $ServiceDetailStateCopyWith(
-      ServiceDetailState _, $Res Function(ServiceDetailState) __);
+class $ProfileStateCopyWith<$Res> {
+  $ProfileStateCopyWith(ProfileState _, $Res Function(ProfileState) __);
 }
 
-/// Adds pattern-matching-related methods to [ServiceDetailState].
-extension ServiceDetailStatePatterns on ServiceDetailState {
+/// Adds pattern-matching-related methods to [ProfileState].
+extension ProfileStatePatterns on ProfileState {
   /// A variant of `map` that fallback to returning `orElse`.
   ///
   /// It is equivalent to doing:
@@ -166,8 +165,7 @@ extension ServiceDetailStatePatterns on ServiceDetailState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(ServiceSpaDetailModel data, DateTime? selectedDate)?
-        loaded,
+    TResult Function(ProfileModel user)? loaded,
     TResult Function(String message)? error,
     TResult Function()? unauthorized,
     required TResult orElse(),
@@ -179,7 +177,7 @@ extension ServiceDetailStatePatterns on ServiceDetailState {
       case _Loading() when loading != null:
         return loading();
       case _Loaded() when loaded != null:
-        return loaded(_that.data, _that.selectedDate);
+        return loaded(_that.user);
       case _Error() when error != null:
         return error(_that.message);
       case _Unauthorized() when unauthorized != null:
@@ -206,9 +204,7 @@ extension ServiceDetailStatePatterns on ServiceDetailState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(
-            ServiceSpaDetailModel data, DateTime? selectedDate)
-        loaded,
+    required TResult Function(ProfileModel user) loaded,
     required TResult Function(String message) error,
     required TResult Function() unauthorized,
   }) {
@@ -219,7 +215,7 @@ extension ServiceDetailStatePatterns on ServiceDetailState {
       case _Loading():
         return loading();
       case _Loaded():
-        return loaded(_that.data, _that.selectedDate);
+        return loaded(_that.user);
       case _Error():
         return error(_that.message);
       case _Unauthorized():
@@ -245,8 +241,7 @@ extension ServiceDetailStatePatterns on ServiceDetailState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(ServiceSpaDetailModel data, DateTime? selectedDate)?
-        loaded,
+    TResult? Function(ProfileModel user)? loaded,
     TResult? Function(String message)? error,
     TResult? Function()? unauthorized,
   }) {
@@ -257,7 +252,7 @@ extension ServiceDetailStatePatterns on ServiceDetailState {
       case _Loading() when loading != null:
         return loading();
       case _Loaded() when loaded != null:
-        return loaded(_that.data, _that.selectedDate);
+        return loaded(_that.user);
       case _Error() when error != null:
         return error(_that.message);
       case _Unauthorized() when unauthorized != null:
@@ -270,7 +265,7 @@ extension ServiceDetailStatePatterns on ServiceDetailState {
 
 /// @nodoc
 
-class _Initial implements ServiceDetailState {
+class _Initial implements ProfileState {
   const _Initial();
 
   @override
@@ -284,13 +279,13 @@ class _Initial implements ServiceDetailState {
 
   @override
   String toString() {
-    return 'ServiceDetailState.initial()';
+    return 'ProfileState.initial()';
   }
 }
 
 /// @nodoc
 
-class _Loading implements ServiceDetailState {
+class _Loading implements ProfileState {
   const _Loading();
 
   @override
@@ -304,19 +299,18 @@ class _Loading implements ServiceDetailState {
 
   @override
   String toString() {
-    return 'ServiceDetailState.loading()';
+    return 'ProfileState.loading()';
   }
 }
 
 /// @nodoc
 
-class _Loaded implements ServiceDetailState {
-  const _Loaded(this.data, this.selectedDate);
+class _Loaded implements ProfileState {
+  const _Loaded(this.user);
 
-  final ServiceSpaDetailModel data;
-  final DateTime? selectedDate;
+  final ProfileModel user;
 
-  /// Create a copy of ServiceDetailState
+  /// Create a copy of ProfileState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
@@ -328,27 +322,25 @@ class _Loaded implements ServiceDetailState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Loaded &&
-            (identical(other.data, data) || other.data == data) &&
-            (identical(other.selectedDate, selectedDate) ||
-                other.selectedDate == selectedDate));
+            (identical(other.user, user) || other.user == user));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, data, selectedDate);
+  int get hashCode => Object.hash(runtimeType, user);
 
   @override
   String toString() {
-    return 'ServiceDetailState.loaded(data: $data, selectedDate: $selectedDate)';
+    return 'ProfileState.loaded(user: $user)';
   }
 }
 
 /// @nodoc
 abstract mixin class _$LoadedCopyWith<$Res>
-    implements $ServiceDetailStateCopyWith<$Res> {
+    implements $ProfileStateCopyWith<$Res> {
   factory _$LoadedCopyWith(_Loaded value, $Res Function(_Loaded) _then) =
       __$LoadedCopyWithImpl;
   @useResult
-  $Res call({ServiceSpaDetailModel data, DateTime? selectedDate});
+  $Res call({ProfileModel user});
 }
 
 /// @nodoc
@@ -358,34 +350,29 @@ class __$LoadedCopyWithImpl<$Res> implements _$LoadedCopyWith<$Res> {
   final _Loaded _self;
   final $Res Function(_Loaded) _then;
 
-  /// Create a copy of ServiceDetailState
+  /// Create a copy of ProfileState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? data = null,
-    Object? selectedDate = freezed,
+    Object? user = null,
   }) {
     return _then(_Loaded(
-      null == data
-          ? _self.data
-          : data // ignore: cast_nullable_to_non_nullable
-              as ServiceSpaDetailModel,
-      freezed == selectedDate
-          ? _self.selectedDate
-          : selectedDate // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+      null == user
+          ? _self.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as ProfileModel,
     ));
   }
 }
 
 /// @nodoc
 
-class _Error implements ServiceDetailState {
+class _Error implements ProfileState {
   const _Error(this.message);
 
   final String message;
 
-  /// Create a copy of ServiceDetailState
+  /// Create a copy of ProfileState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
@@ -405,13 +392,13 @@ class _Error implements ServiceDetailState {
 
   @override
   String toString() {
-    return 'ServiceDetailState.error(message: $message)';
+    return 'ProfileState.error(message: $message)';
   }
 }
 
 /// @nodoc
 abstract mixin class _$ErrorCopyWith<$Res>
-    implements $ServiceDetailStateCopyWith<$Res> {
+    implements $ProfileStateCopyWith<$Res> {
   factory _$ErrorCopyWith(_Error value, $Res Function(_Error) _then) =
       __$ErrorCopyWithImpl;
   @useResult
@@ -425,7 +412,7 @@ class __$ErrorCopyWithImpl<$Res> implements _$ErrorCopyWith<$Res> {
   final _Error _self;
   final $Res Function(_Error) _then;
 
-  /// Create a copy of ServiceDetailState
+  /// Create a copy of ProfileState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   $Res call({
@@ -442,7 +429,7 @@ class __$ErrorCopyWithImpl<$Res> implements _$ErrorCopyWith<$Res> {
 
 /// @nodoc
 
-class _Unauthorized implements ServiceDetailState {
+class _Unauthorized implements ProfileState {
   const _Unauthorized();
 
   @override
@@ -456,7 +443,7 @@ class _Unauthorized implements ServiceDetailState {
 
   @override
   String toString() {
-    return 'ServiceDetailState.unauthorized()';
+    return 'ProfileState.unauthorized()';
   }
 }
 

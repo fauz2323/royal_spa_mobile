@@ -11,6 +11,8 @@ part 'service_detail_cubit.freezed.dart';
 class ServiceDetailCubit extends Cubit<ServiceDetailState> {
   ServiceDetailCubit() : super(const ServiceDetailState.initial());
   late String token;
+  late ServiceSpaDetailModel serviceDetail;
+  DateTime? selectedDate;
 
   Future<void> initial(String uuid) async {
     emit(const ServiceDetailState.loading());
@@ -27,10 +29,16 @@ class ServiceDetailCubit extends Cubit<ServiceDetailState> {
               "Failed to fetch service detail. Error code: $l"));
         }
       }, (r) {
-        emit(ServiceDetailState.loaded(r));
+        serviceDetail = r;
+        emit(ServiceDetailState.loaded(r, selectedDate));
       });
     } catch (e) {
       emit(ServiceDetailState.error(e.toString()));
     }
+  }
+
+  setDate(DateTime date) {
+    selectedDate = date;
+    emit(ServiceDetailState.loaded(serviceDetail, selectedDate));
   }
 }

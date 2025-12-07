@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:royal_spa_garden_mobile/utils/size_utils.dart';
 import 'package:royal_spa_garden_mobile/utils/token_utils.dart';
 import 'package:royal_spa_garden_mobile/views/login/cubit/login_cubit.dart';
 

@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'service_detail_cubit.dart';
+part of 'leaderboards_cubit.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -13,11 +13,11 @@ part of 'service_detail_cubit.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$ServiceDetailState {
+mixin _$LeaderboardsState {
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is ServiceDetailState);
+        (other.runtimeType == runtimeType && other is LeaderboardsState);
   }
 
   @override
@@ -25,18 +25,18 @@ mixin _$ServiceDetailState {
 
   @override
   String toString() {
-    return 'ServiceDetailState()';
+    return 'LeaderboardsState()';
   }
 }
 
 /// @nodoc
-class $ServiceDetailStateCopyWith<$Res> {
-  $ServiceDetailStateCopyWith(
-      ServiceDetailState _, $Res Function(ServiceDetailState) __);
+class $LeaderboardsStateCopyWith<$Res> {
+  $LeaderboardsStateCopyWith(
+      LeaderboardsState _, $Res Function(LeaderboardsState) __);
 }
 
-/// Adds pattern-matching-related methods to [ServiceDetailState].
-extension ServiceDetailStatePatterns on ServiceDetailState {
+/// Adds pattern-matching-related methods to [LeaderboardsState].
+extension LeaderboardsStatePatterns on LeaderboardsState {
   /// A variant of `map` that fallback to returning `orElse`.
   ///
   /// It is equivalent to doing:
@@ -55,7 +55,7 @@ extension ServiceDetailStatePatterns on ServiceDetailState {
     TResult Function(_Loading value)? loading,
     TResult Function(_Loaded value)? loaded,
     TResult Function(_Error value)? error,
-    TResult Function(_Unauthorized value)? unauthorized,
+    TResult Function(_Unauthorize value)? unauthorize,
     required TResult orElse(),
   }) {
     final _that = this;
@@ -68,8 +68,8 @@ extension ServiceDetailStatePatterns on ServiceDetailState {
         return loaded(_that);
       case _Error() when error != null:
         return error(_that);
-      case _Unauthorized() when unauthorized != null:
-        return unauthorized(_that);
+      case _Unauthorize() when unauthorize != null:
+        return unauthorize(_that);
       case _:
         return orElse();
     }
@@ -94,7 +94,7 @@ extension ServiceDetailStatePatterns on ServiceDetailState {
     required TResult Function(_Loading value) loading,
     required TResult Function(_Loaded value) loaded,
     required TResult Function(_Error value) error,
-    required TResult Function(_Unauthorized value) unauthorized,
+    required TResult Function(_Unauthorize value) unauthorize,
   }) {
     final _that = this;
     switch (_that) {
@@ -106,8 +106,8 @@ extension ServiceDetailStatePatterns on ServiceDetailState {
         return loaded(_that);
       case _Error():
         return error(_that);
-      case _Unauthorized():
-        return unauthorized(_that);
+      case _Unauthorize():
+        return unauthorize(_that);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -131,7 +131,7 @@ extension ServiceDetailStatePatterns on ServiceDetailState {
     TResult? Function(_Loading value)? loading,
     TResult? Function(_Loaded value)? loaded,
     TResult? Function(_Error value)? error,
-    TResult? Function(_Unauthorized value)? unauthorized,
+    TResult? Function(_Unauthorize value)? unauthorize,
   }) {
     final _that = this;
     switch (_that) {
@@ -143,8 +143,8 @@ extension ServiceDetailStatePatterns on ServiceDetailState {
         return loaded(_that);
       case _Error() when error != null:
         return error(_that);
-      case _Unauthorized() when unauthorized != null:
-        return unauthorized(_that);
+      case _Unauthorize() when unauthorize != null:
+        return unauthorize(_that);
       case _:
         return null;
     }
@@ -166,10 +166,9 @@ extension ServiceDetailStatePatterns on ServiceDetailState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(ServiceSpaDetailModel data, DateTime? selectedDate)?
-        loaded,
+    TResult Function(LeaderboardsModel data)? loaded,
     TResult Function(String message)? error,
-    TResult Function()? unauthorized,
+    TResult Function()? unauthorize,
     required TResult orElse(),
   }) {
     final _that = this;
@@ -179,11 +178,11 @@ extension ServiceDetailStatePatterns on ServiceDetailState {
       case _Loading() when loading != null:
         return loading();
       case _Loaded() when loaded != null:
-        return loaded(_that.data, _that.selectedDate);
+        return loaded(_that.data);
       case _Error() when error != null:
         return error(_that.message);
-      case _Unauthorized() when unauthorized != null:
-        return unauthorized();
+      case _Unauthorize() when unauthorize != null:
+        return unauthorize();
       case _:
         return orElse();
     }
@@ -206,11 +205,9 @@ extension ServiceDetailStatePatterns on ServiceDetailState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(
-            ServiceSpaDetailModel data, DateTime? selectedDate)
-        loaded,
+    required TResult Function(LeaderboardsModel data) loaded,
     required TResult Function(String message) error,
-    required TResult Function() unauthorized,
+    required TResult Function() unauthorize,
   }) {
     final _that = this;
     switch (_that) {
@@ -219,11 +216,11 @@ extension ServiceDetailStatePatterns on ServiceDetailState {
       case _Loading():
         return loading();
       case _Loaded():
-        return loaded(_that.data, _that.selectedDate);
+        return loaded(_that.data);
       case _Error():
         return error(_that.message);
-      case _Unauthorized():
-        return unauthorized();
+      case _Unauthorize():
+        return unauthorize();
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -245,10 +242,9 @@ extension ServiceDetailStatePatterns on ServiceDetailState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(ServiceSpaDetailModel data, DateTime? selectedDate)?
-        loaded,
+    TResult? Function(LeaderboardsModel data)? loaded,
     TResult? Function(String message)? error,
-    TResult? Function()? unauthorized,
+    TResult? Function()? unauthorize,
   }) {
     final _that = this;
     switch (_that) {
@@ -257,11 +253,11 @@ extension ServiceDetailStatePatterns on ServiceDetailState {
       case _Loading() when loading != null:
         return loading();
       case _Loaded() when loaded != null:
-        return loaded(_that.data, _that.selectedDate);
+        return loaded(_that.data);
       case _Error() when error != null:
         return error(_that.message);
-      case _Unauthorized() when unauthorized != null:
-        return unauthorized();
+      case _Unauthorize() when unauthorize != null:
+        return unauthorize();
       case _:
         return null;
     }
@@ -270,7 +266,7 @@ extension ServiceDetailStatePatterns on ServiceDetailState {
 
 /// @nodoc
 
-class _Initial implements ServiceDetailState {
+class _Initial implements LeaderboardsState {
   const _Initial();
 
   @override
@@ -284,13 +280,13 @@ class _Initial implements ServiceDetailState {
 
   @override
   String toString() {
-    return 'ServiceDetailState.initial()';
+    return 'LeaderboardsState.initial()';
   }
 }
 
 /// @nodoc
 
-class _Loading implements ServiceDetailState {
+class _Loading implements LeaderboardsState {
   const _Loading();
 
   @override
@@ -304,19 +300,18 @@ class _Loading implements ServiceDetailState {
 
   @override
   String toString() {
-    return 'ServiceDetailState.loading()';
+    return 'LeaderboardsState.loading()';
   }
 }
 
 /// @nodoc
 
-class _Loaded implements ServiceDetailState {
-  const _Loaded(this.data, this.selectedDate);
+class _Loaded implements LeaderboardsState {
+  const _Loaded(this.data);
 
-  final ServiceSpaDetailModel data;
-  final DateTime? selectedDate;
+  final LeaderboardsModel data;
 
-  /// Create a copy of ServiceDetailState
+  /// Create a copy of LeaderboardsState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
@@ -328,27 +323,25 @@ class _Loaded implements ServiceDetailState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Loaded &&
-            (identical(other.data, data) || other.data == data) &&
-            (identical(other.selectedDate, selectedDate) ||
-                other.selectedDate == selectedDate));
+            (identical(other.data, data) || other.data == data));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, data, selectedDate);
+  int get hashCode => Object.hash(runtimeType, data);
 
   @override
   String toString() {
-    return 'ServiceDetailState.loaded(data: $data, selectedDate: $selectedDate)';
+    return 'LeaderboardsState.loaded(data: $data)';
   }
 }
 
 /// @nodoc
 abstract mixin class _$LoadedCopyWith<$Res>
-    implements $ServiceDetailStateCopyWith<$Res> {
+    implements $LeaderboardsStateCopyWith<$Res> {
   factory _$LoadedCopyWith(_Loaded value, $Res Function(_Loaded) _then) =
       __$LoadedCopyWithImpl;
   @useResult
-  $Res call({ServiceSpaDetailModel data, DateTime? selectedDate});
+  $Res call({LeaderboardsModel data});
 }
 
 /// @nodoc
@@ -358,34 +351,29 @@ class __$LoadedCopyWithImpl<$Res> implements _$LoadedCopyWith<$Res> {
   final _Loaded _self;
   final $Res Function(_Loaded) _then;
 
-  /// Create a copy of ServiceDetailState
+  /// Create a copy of LeaderboardsState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   $Res call({
     Object? data = null,
-    Object? selectedDate = freezed,
   }) {
     return _then(_Loaded(
       null == data
           ? _self.data
           : data // ignore: cast_nullable_to_non_nullable
-              as ServiceSpaDetailModel,
-      freezed == selectedDate
-          ? _self.selectedDate
-          : selectedDate // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as LeaderboardsModel,
     ));
   }
 }
 
 /// @nodoc
 
-class _Error implements ServiceDetailState {
-  const _Error(this.message);
+class _Error implements LeaderboardsState {
+  const _Error({required this.message});
 
   final String message;
 
-  /// Create a copy of ServiceDetailState
+  /// Create a copy of LeaderboardsState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
@@ -405,13 +393,13 @@ class _Error implements ServiceDetailState {
 
   @override
   String toString() {
-    return 'ServiceDetailState.error(message: $message)';
+    return 'LeaderboardsState.error(message: $message)';
   }
 }
 
 /// @nodoc
 abstract mixin class _$ErrorCopyWith<$Res>
-    implements $ServiceDetailStateCopyWith<$Res> {
+    implements $LeaderboardsStateCopyWith<$Res> {
   factory _$ErrorCopyWith(_Error value, $Res Function(_Error) _then) =
       __$ErrorCopyWithImpl;
   @useResult
@@ -425,14 +413,14 @@ class __$ErrorCopyWithImpl<$Res> implements _$ErrorCopyWith<$Res> {
   final _Error _self;
   final $Res Function(_Error) _then;
 
-  /// Create a copy of ServiceDetailState
+  /// Create a copy of LeaderboardsState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   $Res call({
     Object? message = null,
   }) {
     return _then(_Error(
-      null == message
+      message: null == message
           ? _self.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
@@ -442,13 +430,13 @@ class __$ErrorCopyWithImpl<$Res> implements _$ErrorCopyWith<$Res> {
 
 /// @nodoc
 
-class _Unauthorized implements ServiceDetailState {
-  const _Unauthorized();
+class _Unauthorize implements LeaderboardsState {
+  const _Unauthorize();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _Unauthorized);
+        (other.runtimeType == runtimeType && other is _Unauthorize);
   }
 
   @override
@@ -456,7 +444,7 @@ class _Unauthorized implements ServiceDetailState {
 
   @override
   String toString() {
-    return 'ServiceDetailState.unauthorized()';
+    return 'LeaderboardsState.unauthorize()';
   }
 }
 
