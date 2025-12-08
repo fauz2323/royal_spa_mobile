@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:royal_spa_garden_mobile/model/profile_model.dart';
 import 'package:royal_spa_garden_mobile/utils/size_utils.dart';
 import 'package:royal_spa_garden_mobile/views/home_screen/cubit/home_screen_cubit.dart';
@@ -23,6 +24,29 @@ class HomeScreenView extends StatelessWidget {
 
   Widget _build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.miniCenterDocked,
+      floatingActionButton: BlocBuilder<HomeScreenCubit, HomeScreenState>(
+        builder: (context, state) {
+          return state.maybeWhen(
+              orElse: () => Container(),
+              loaded: (data) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 3.0),
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      _dialogBuilder(context, data.data.user.email);
+                    },
+                    backgroundColor: Colors.white,
+                    child: const Icon(
+                      Icons.qr_code,
+                      color: Colors.green,
+                    ),
+                  ),
+                );
+              });
+        },
+      ),
       body: BlocConsumer<HomeScreenCubit, HomeScreenState>(
         listener: (context, state) {},
         builder: (context, state) {
@@ -141,6 +165,20 @@ class HomeScreenView extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Future<void> _dialogBuilder(BuildContext context, String data) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('QR Code'),
+          content: PrettyQrView.data(
+            data: data,
+          ),
+        );
+      },
     );
   }
 }

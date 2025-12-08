@@ -10,6 +10,7 @@ part 'home_screen_cubit.freezed.dart';
 class HomeScreenCubit extends Cubit<HomeScreenState> {
   HomeScreenCubit() : super(const HomeScreenState.loading());
   late String token;
+  String email = '-';
   initial() async {
     emit(const HomeScreenState.loading());
     try {
@@ -30,6 +31,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
           return;
         },
         (profileModel) {
+          email = profileModel.data.user.email;
           emit(HomeScreenState.loaded(profileModel));
           return;
         },
