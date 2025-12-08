@@ -24,8 +24,7 @@ class HomeScreenView extends StatelessWidget {
 
   Widget _build(BuildContext context) {
     return Scaffold(
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.miniCenterDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: BlocBuilder<HomeScreenCubit, HomeScreenState>(
         builder: (context, state) {
           return state.maybeWhen(
