@@ -34,6 +34,7 @@ class ServiceSpaNetwork {
 
   Future<Either<NetworkModel, ServiceSpaDetailModel>> getServiceDetail(
       String token, String serviceId) async {
+    print('Fetching details for service ID: $serviceId');
     final response = await http.get(
       Uri.parse(
           'https://rumah.nurfauzan.site/api/customer/services/$serviceId/detail'),

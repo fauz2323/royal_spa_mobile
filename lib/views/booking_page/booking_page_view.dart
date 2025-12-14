@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:royal_spa_garden_mobile/model/service_spa_detail_model.dart';
+import 'package:royal_spa_garden_mobile/utils/token_utils.dart';
+import 'package:royal_spa_garden_mobile/views/booking_page/cubit/booking_page_cubit.dart';
 import '../../model/service_spa_model.dart';
 
 class BookingPageView extends StatefulWidget {
@@ -12,9 +16,7 @@ class _BookingPageViewState extends State<BookingPageView> {
   final _formKey = GlobalKey<FormState>();
   final _notesController = TextEditingController();
   final _timeController = TextEditingController();
-
-  Datum? _selectedService;
-  DateTime? _selectedDate;
+  late String serviceId;
 
   @override
   void initState() {
@@ -30,61 +32,153 @@ class _BookingPageViewState extends State<BookingPageView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[50],
-      appBar: AppBar(
-        title: const Text(
-          'Book Spa Service',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        backgroundColor: Colors.green,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white),
+    serviceId = ModalRoute.of(context)!.settings.arguments as String;
+    return BlocProvider(
+      create: (context) => BookingPageCubit()..initial(serviceId),
+      child: Builder(
+        builder: (context) {
+          return _build(context);
+        },
       ),
-      body: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Service Selection Card
-              _buildSectionTitle('Spa Service'),
-              const SizedBox(height: 12),
-              // _buildServiceSelectionCard(),
+    );
+  }
 
-              const SizedBox(height: 24),
-
-              // Date Selection
-              _buildSectionTitle('Select Date'),
-              const SizedBox(height: 12),
-              _buildDateSelectionCard(),
-
-              const SizedBox(height: 24),
-
-              // Time Selection
-              _buildSectionTitle('Select Time'),
-              const SizedBox(height: 12),
-              _buildTimeSelectionCard(),
-
-              const SizedBox(height: 24),
-
-              // Notes Section
-              _buildSectionTitle('Additional Notes (Optional)'),
-              const SizedBox(height: 12),
-              _buildNotesField(),
-
-              const SizedBox(height: 32),
-
-              // Book Now Button
-              _buildBookNowButton(),
-
-              const SizedBox(height: 20),
-            ],
+  Widget _build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: Colors.grey[50],
+        appBar: AppBar(
+          title: const Text(
+            'Book Spa Service',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
           ),
+          backgroundColor: Colors.green,
+          elevation: 0,
+          iconTheme: const IconThemeData(color: Colors.white),
+        ),
+        body: BlocConsumer<BookingPageCubit, BookingPageState>(
+          listener: (context, state) {
+            state.maybeWhen(
+                orElse: () {},
+                unauthorized: () async {
+                  await TokenUtils.deleteAllTokens();
+                  Navigator.of(context)
+                      .pushNamedAndRemoveUntil('/login', (route) => false);
+                  // Handle unauthorized state, e.g., navigate to login
+                });
+          },
+          builder: (context, state) {
+            return state.when(
+              initial: () => const SizedBox.shrink(),
+              loading: () => const Center(child: CircularProgressIndicator()),
+              loaded: (data, date, time) => _loaded(context, data, date, time),
+              error: (message) => Center(
+                child: Text(
+                  'Error: $message',
+                  style: const TextStyle(color: Colors.red),
+                ),
+              ),
+              unauthorized: () => const SizedBox.shrink(),
+              success: () => Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.check_circle_outline,
+                      color: Colors.green,
+                      size: 100,
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Booking Successful!',
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Your spa service has been booked successfully.',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(height: 24),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context)
+                            .pushNamedAndRemoveUntil('/home', (route) => false);
+                      },
+                      child: const Text('Back to Home'),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ));
+  }
+
+  Widget _loaded(BuildContext context, ServiceSpaDetailModel data,
+      DateTime? selectedDate, TimeOfDay? selectedTime) {
+    return Form(
+      key: _formKey,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Service Selection Card
+            _buildSectionTitle('Spa Service'),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.all(8),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.1),
+                    spreadRadius: 1,
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Text(data.data.name,
+                  style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87)),
+            ),
+
+            const SizedBox(height: 24),
+
+            // Date Selection
+            _buildSectionTitle('Select Date'),
+            const SizedBox(height: 12),
+            _buildDateSelectionCard(context, selectedDate),
+
+            const SizedBox(height: 24),
+
+            // Time Selection
+            _buildSectionTitle('Select Time'),
+            const SizedBox(height: 12),
+            _buildTimeSelectionCard(context, selectedTime),
+
+            const SizedBox(height: 24),
+
+            // Notes Section
+            _buildSectionTitle('Additional Notes (Optional)'),
+            const SizedBox(height: 12),
+            _buildNotesField(),
+
+            const SizedBox(height: 32),
+
+            // Book Now Button
+            _buildBookNowButton(context),
+
+            const SizedBox(height: 20),
+          ],
         ),
       ),
     );
@@ -101,7 +195,7 @@ class _BookingPageViewState extends State<BookingPageView> {
     );
   }
 
-  Widget _buildDateSelectionCard() {
+  Widget _buildDateSelectionCard(BuildContext context, DateTime? selectedDate) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -120,7 +214,13 @@ class _BookingPageViewState extends State<BookingPageView> {
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
-          onTap: _selectDate,
+          onTap: () {
+            _selectDate().then((pickedDate) {
+              if (pickedDate != null) {
+                context.read<BookingPageCubit>().setDate(pickedDate);
+              }
+            });
+          },
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Row(
@@ -141,15 +241,13 @@ class _BookingPageViewState extends State<BookingPageView> {
                 const SizedBox(width: 16),
                 Expanded(
                   child: Text(
-                    _selectedDate != null
-                        ? '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}'
+                    selectedDate != null
+                        ? selectedDate.toLocal().toString().split(' ')[0]
                         : 'Select Date',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: _selectedDate != null
-                          ? Colors.black87
-                          : Colors.grey[600],
+                      color: Colors.black87,
                     ),
                   ),
                 ),
@@ -166,8 +264,10 @@ class _BookingPageViewState extends State<BookingPageView> {
     );
   }
 
-  Widget _buildTimeSelectionCard() {
+  Widget _buildTimeSelectionCard(
+      BuildContext context, TimeOfDay? selectedTime) {
     return Container(
+      width: double.infinity,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -180,49 +280,56 @@ class _BookingPageViewState extends State<BookingPageView> {
           ),
         ],
       ),
-      child: TextFormField(
-        controller: _timeController,
-        decoration: InputDecoration(
-          hintText: 'Enter time (e.g., 14:30)',
-          hintStyle: TextStyle(color: Colors.grey[500]),
-          prefixIcon: Container(
-            padding: const EdgeInsets.all(12),
-            child: Container(
-              width: 24,
-              height: 24,
-              decoration: BoxDecoration(
-                color: Colors.orange[50],
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: Icon(
-                Icons.access_time,
-                color: Colors.orange[600],
-                size: 16,
-              ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: () {
+            _selectTime(context).then((pickedTime) {
+              if (pickedTime != null) {
+                context.read<BookingPageCubit>().setTime(pickedTime);
+              }
+            });
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: Colors.blue[50],
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(
+                    Icons.calendar_today,
+                    color: Colors.blue[600],
+                    size: 24,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    selectedTime != null
+                        ? selectedTime.format(context)
+                        : 'Select Time',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ),
+                Icon(
+                  Icons.arrow_forward_ios,
+                  color: Colors.grey[400],
+                  size: 16,
+                ),
+              ],
             ),
           ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide.none,
-          ),
-          filled: true,
-          fillColor: Colors.white,
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         ),
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Please enter service time';
-          }
-
-          // Validate time format (HH:mm)
-          final timeRegex = RegExp(r'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$');
-          if (!timeRegex.hasMatch(value)) {
-            return 'Please enter time in HH:mm format (e.g., 14:30)';
-          }
-
-          return null;
-        },
       ),
     );
   }
@@ -267,12 +374,17 @@ class _BookingPageViewState extends State<BookingPageView> {
     );
   }
 
-  Widget _buildBookNowButton() {
+  Widget _buildBookNowButton(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       height: 56,
       child: ElevatedButton(
-        onPressed: _isFormValid() ? _submitBooking : null,
+        onPressed: () async {
+          if (_formKey.currentState!.validate()) {
+            final notes = _notesController.text;
+            context.read<BookingPageCubit>().submitData(notes);
+          }
+        },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.pink[300],
           disabledBackgroundColor: Colors.grey[300],
@@ -293,13 +405,7 @@ class _BookingPageViewState extends State<BookingPageView> {
     );
   }
 
-  bool _isFormValid() {
-    return _selectedService != null &&
-        _selectedDate != null &&
-        _timeController.text.isNotEmpty;
-  }
-
-  Future<void> _selectDate() async {
+  Future<DateTime?> _selectDate() async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -318,107 +424,21 @@ class _BookingPageViewState extends State<BookingPageView> {
       },
     );
 
-    if (picked != null && picked != _selectedDate) {
-      setState(() {
-        _selectedDate = picked;
-      });
+    if (picked != null) {
+      return picked;
     }
+    return null;
   }
 
-  void _showServiceSelectionDialog() {
-    // In a real app, you would fetch services from API
-    // For now, we'll show a placeholder dialog
-    showDialog(
+  Future<TimeOfDay?> _selectTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Select Spa Service'),
-        content: const Text(
-          'Service selection will be implemented with API integration. '
-          'For now, please select from available services.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Close'),
-          ),
-        ],
-      ),
+      initialTime: TimeOfDay.now(),
     );
-  }
 
-  void _submitBooking() {
-    if (_formKey.currentState!.validate() && _isFormValid()) {
-      // Use time directly from text field
-      final timeString = _timeController.text;
-
-      // Format date to YYYY-MM-DD format for backend
-      final dateString =
-          '${_selectedDate!.year}-${_selectedDate!.month.toString().padLeft(2, '0')}-${_selectedDate!.day.toString().padLeft(2, '0')}';
-
-      // Prepare booking data according to validation rules
-      final bookingData = {
-        'spa_services_id': _selectedService!.id,
-        'time_service': timeString,
-        'date_service': dateString,
-        'notes':
-            _notesController.text.isNotEmpty ? _notesController.text : null,
-      };
-
-      // Show confirmation dialog
-      _showBookingConfirmation(bookingData);
+    if (picked != null) {
+      return picked;
     }
-  }
-
-  void _showBookingConfirmation(Map<String, dynamic> bookingData) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Confirm Booking'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Service: ${_selectedService!.name}'),
-            Text('Date: ${bookingData['date_service']}'),
-            Text('Time: ${bookingData['time_service']}'),
-            if (bookingData['notes'] != null)
-              Text('Notes: ${bookingData['notes']}'),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              // Here you would submit to API
-              _showSuccessMessage();
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.pink[300],
-            ),
-            child: const Text('Confirm', style: TextStyle(color: Colors.white)),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showSuccessMessage() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Text('Booking submitted successfully!'),
-        backgroundColor: Colors.green,
-        action: SnackBarAction(
-          label: 'OK',
-          textColor: Colors.white,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-    );
+    return null;
   }
 }

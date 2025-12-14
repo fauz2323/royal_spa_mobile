@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:royal_spa_garden_mobile/views/about/about_view.dart';
 import 'package:royal_spa_garden_mobile/views/booking_page/booking_page_view.dart';
+import 'package:royal_spa_garden_mobile/views/detail_order/detail_order_view.dart';
 import 'package:royal_spa_garden_mobile/views/edit_profile/edit_profile_view.dart';
 import 'package:royal_spa_garden_mobile/views/forgot_password/forgot_password_view.dart';
 import 'package:royal_spa_garden_mobile/views/history/history_view.dart';
@@ -30,5 +31,6 @@ class RouteUtils {
     '/history': (context) => const HistoryView(),
     '/leaderboard': (context) => const LeaderboardView(),
     '/booking_page': (context) => const BookingPageView(),
+    '/detail_order': (context) => const DetailOrderView(),
   };
 }

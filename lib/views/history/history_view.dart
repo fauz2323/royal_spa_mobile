@@ -106,7 +106,12 @@ class HistoryView extends StatelessWidget {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      // Add detail functionality here
+                      // Add detail functionality here\
+                      Navigator.pushNamed(
+                        context,
+                        '/detail_order',
+                        arguments: data.data[index].id.toString(),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,

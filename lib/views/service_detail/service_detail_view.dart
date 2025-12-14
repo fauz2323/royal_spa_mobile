@@ -80,7 +80,7 @@ class ServiceDetailView extends StatelessWidget {
                   onPressed: () {
                     // Aksi untuk booking
                     Navigator.pushNamed(context, '/booking_page',
-                        arguments: ServiceDetailArgument(args.serviceId));
+                        arguments: args.serviceId.toString());
                   },
                   icon: const Icon(Icons.calendar_today, color: Colors.white),
                   label: const Text(

@@ -14,6 +14,7 @@ class HistoryCubit extends Cubit<HistoryState> {
   initial() async {
     emit(const HistoryState.loading());
     _token = await TokenUtils.getToken();
+    print('token is $_token');
     if (_token == null) {
       emit(const HistoryState.unauthorized());
       return;

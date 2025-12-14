@@ -44,6 +44,7 @@ dependencies:
   flutter_secure_storage: ^9.2.4
   dartz: ^0.10.1
   pretty_qr_code: ^3.5.0
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:
