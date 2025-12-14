@@ -134,16 +134,19 @@ class HomeScreenView extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 30),
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        BottonIconWidget(
+                        const BottonIconWidget(
                           title: "Rewards",
                           icon: Icons.redeem_rounded,
                         ),
                         BottonIconWidget(
                           title: "Voucher",
                           icon: Icons.discount_rounded,
+                          onTap: () {
+                            Navigator.pushNamed(context, '/voucher_shop');
+                          },
                         )
                       ],
                     )

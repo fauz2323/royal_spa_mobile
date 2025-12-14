@@ -14,6 +14,7 @@ import 'package:royal_spa_garden_mobile/views/register/register_view.dart';
 import 'package:royal_spa_garden_mobile/views/service/service_view.dart';
 import 'package:royal_spa_garden_mobile/views/service_detail/service_detail_view.dart';
 import 'package:royal_spa_garden_mobile/views/splash/splash_view.dart';
+import 'package:royal_spa_garden_mobile/views/voucher_shop/voucher_shop_view.dart';
 
 class RouteUtils {
   static Map<String, Widget Function(BuildContext)> routes = {
@@ -32,5 +33,6 @@ class RouteUtils {
     '/leaderboard': (context) => const LeaderboardView(),
     '/booking_page': (context) => const BookingPageView(),
     '/detail_order': (context) => const DetailOrderView(),
+    '/voucher_shop': (context) => const VoucherShopView(),
   };
 }
