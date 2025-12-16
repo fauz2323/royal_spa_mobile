@@ -10,7 +10,7 @@ import 'package:royal_spa_garden_mobile/model/order_make_model.dart';
 class OrdersNetwork {
   Future<Either<NetworkModel, HistoryModel>> history(String token) async {
     final response = await http.get(
-      Uri.parse('https://rumah.nurfauzan.site/api/customer/orders'),
+      Uri.parse('https://rizky-firman.com/api/customer/orders'),
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'accept': 'application/json',
@@ -40,7 +40,7 @@ class OrdersNetwork {
     };
 
     final response = await http.post(
-      Uri.parse('https://rumah.nurfauzan.site/api/customer/orders/view'),
+      Uri.parse('https://rizky-firman.com/api/customer/orders/view'),
       body: body,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -74,7 +74,7 @@ class OrdersNetwork {
     };
 
     final response = await http.post(
-      Uri.parse('https://rumah.nurfauzan.site/api/customer/orders/make'),
+      Uri.parse('https://rizky-firman.com/api/customer/orders/make'),
       body: body,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',

@@ -12,8 +12,7 @@ class PointsNetwork {
   Future<Either<NetworkModel, LeaderboardsModel>> leaderboard(
       String token) async {
     final response = await http.get(
-      Uri.parse(
-          'https://rumah.nurfauzan.site/api/customer/points/leaderboards'),
+      Uri.parse('https://rizky-firman.com/api/customer/points/leaderboards'),
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'accept': 'application/json',
@@ -39,8 +38,7 @@ class PointsNetwork {
   Future<Either<NetworkModel, VoucherShopListModel>> getVoucherShop(
       String token) async {
     final response = await http.get(
-      Uri.parse(
-          'https://rumah.nurfauzan.site/api/customer/points/voucher-shop'),
+      Uri.parse('https://rizky-firman.com/api/customer/points/voucher-shop'),
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'accept': 'application/json',
@@ -70,8 +68,7 @@ class PointsNetwork {
     };
 
     final response = await http.post(
-      Uri.parse(
-          'https://rumah.nurfauzan.site/api/customer/points/redeem-voucher'),
+      Uri.parse('https://rizky-firman.com/api/customer/points/redeem-voucher'),
       body: body,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -102,7 +99,7 @@ class PointsNetwork {
     String token,
   ) async {
     final response = await http.get(
-      Uri.parse('https://rumah.nurfauzan.site/api/customer/points/reward'),
+      Uri.parse('https://rizky-firman.com/api/customer/points/reward'),
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'accept': 'application/json',

@@ -9,7 +9,7 @@ class MissionNetwork {
   Future<Either<NetworkModel, ListMissionModel>> getMission(
       String token) async {
     final response = await http.get(
-      Uri.parse('https://rumah.nurfauzan.site/api/customer/mission/index'),
+      Uri.parse('https://rizky-firman.com/api/customer/mission/index'),
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'accept': 'application/json',

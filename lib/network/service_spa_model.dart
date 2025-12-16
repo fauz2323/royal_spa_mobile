@@ -9,7 +9,7 @@ class ServiceSpaNetwork {
   Future<Either<NetworkModel, ServiceSpaModel>> getServices(
       String token) async {
     final response = await http.get(
-      Uri.parse('https://rumah.nurfauzan.site/api/customer/services'),
+      Uri.parse('https://rizky-firman.com/api/customer/services'),
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'accept': 'application/json',
@@ -37,7 +37,7 @@ class ServiceSpaNetwork {
     print('Fetching details for service ID: $serviceId');
     final response = await http.get(
       Uri.parse(
-          'https://rumah.nurfauzan.site/api/customer/services/$serviceId/detail'),
+          'https://rizky-firman.com/api/customer/services/$serviceId/detail'),
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'accept': 'application/json',
