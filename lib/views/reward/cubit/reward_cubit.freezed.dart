@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'voucher_shop_cubit.dart';
+part of 'reward_cubit.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -13,11 +13,11 @@ part of 'voucher_shop_cubit.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$VoucherShopState {
+mixin _$RewardState {
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is VoucherShopState);
+        (other.runtimeType == runtimeType && other is RewardState);
   }
 
   @override
@@ -25,18 +25,17 @@ mixin _$VoucherShopState {
 
   @override
   String toString() {
-    return 'VoucherShopState()';
+    return 'RewardState()';
   }
 }
 
 /// @nodoc
-class $VoucherShopStateCopyWith<$Res> {
-  $VoucherShopStateCopyWith(
-      VoucherShopState _, $Res Function(VoucherShopState) __);
+class $RewardStateCopyWith<$Res> {
+  $RewardStateCopyWith(RewardState _, $Res Function(RewardState) __);
 }
 
-/// Adds pattern-matching-related methods to [VoucherShopState].
-extension VoucherShopStatePatterns on VoucherShopState {
+/// Adds pattern-matching-related methods to [RewardState].
+extension RewardStatePatterns on RewardState {
   /// A variant of `map` that fallback to returning `orElse`.
   ///
   /// It is equivalent to doing:
@@ -53,7 +52,6 @@ extension VoucherShopStatePatterns on VoucherShopState {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
-    TResult Function(_Success value)? success,
     TResult Function(_Loaded value)? loaded,
     TResult Function(_Error value)? error,
     TResult Function(_Unauthorized value)? unauthorized,
@@ -65,8 +63,6 @@ extension VoucherShopStatePatterns on VoucherShopState {
         return initial(_that);
       case _Loading() when loading != null:
         return loading(_that);
-      case _Success() when success != null:
-        return success(_that);
       case _Loaded() when loaded != null:
         return loaded(_that);
       case _Error() when error != null:
@@ -95,7 +91,6 @@ extension VoucherShopStatePatterns on VoucherShopState {
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
-    required TResult Function(_Success value) success,
     required TResult Function(_Loaded value) loaded,
     required TResult Function(_Error value) error,
     required TResult Function(_Unauthorized value) unauthorized,
@@ -106,8 +101,6 @@ extension VoucherShopStatePatterns on VoucherShopState {
         return initial(_that);
       case _Loading():
         return loading(_that);
-      case _Success():
-        return success(_that);
       case _Loaded():
         return loaded(_that);
       case _Error():
@@ -135,7 +128,6 @@ extension VoucherShopStatePatterns on VoucherShopState {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
     TResult? Function(_Loading value)? loading,
-    TResult? Function(_Success value)? success,
     TResult? Function(_Loaded value)? loaded,
     TResult? Function(_Error value)? error,
     TResult? Function(_Unauthorized value)? unauthorized,
@@ -146,8 +138,6 @@ extension VoucherShopStatePatterns on VoucherShopState {
         return initial(_that);
       case _Loading() when loading != null:
         return loading(_that);
-      case _Success() when success != null:
-        return success(_that);
       case _Loaded() when loaded != null:
         return loaded(_that);
       case _Error() when error != null:
@@ -175,9 +165,8 @@ extension VoucherShopStatePatterns on VoucherShopState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(String message)? success,
-    TResult Function(VoucherShopListModel data, ProfileModel profile)? loaded,
-    TResult Function(String? message)? error,
+    TResult Function(RewardListModel rewards)? loaded,
+    TResult Function(String message)? error,
     TResult Function()? unauthorized,
     required TResult orElse(),
   }) {
@@ -187,10 +176,8 @@ extension VoucherShopStatePatterns on VoucherShopState {
         return initial();
       case _Loading() when loading != null:
         return loading();
-      case _Success() when success != null:
-        return success(_that.message);
       case _Loaded() when loaded != null:
-        return loaded(_that.data, _that.profile);
+        return loaded(_that.rewards);
       case _Error() when error != null:
         return error(_that.message);
       case _Unauthorized() when unauthorized != null:
@@ -217,10 +204,8 @@ extension VoucherShopStatePatterns on VoucherShopState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(String message) success,
-    required TResult Function(VoucherShopListModel data, ProfileModel profile)
-        loaded,
-    required TResult Function(String? message) error,
+    required TResult Function(RewardListModel rewards) loaded,
+    required TResult Function(String message) error,
     required TResult Function() unauthorized,
   }) {
     final _that = this;
@@ -229,10 +214,8 @@ extension VoucherShopStatePatterns on VoucherShopState {
         return initial();
       case _Loading():
         return loading();
-      case _Success():
-        return success(_that.message);
       case _Loaded():
-        return loaded(_that.data, _that.profile);
+        return loaded(_that.rewards);
       case _Error():
         return error(_that.message);
       case _Unauthorized():
@@ -258,9 +241,8 @@ extension VoucherShopStatePatterns on VoucherShopState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(String message)? success,
-    TResult? Function(VoucherShopListModel data, ProfileModel profile)? loaded,
-    TResult? Function(String? message)? error,
+    TResult? Function(RewardListModel rewards)? loaded,
+    TResult? Function(String message)? error,
     TResult? Function()? unauthorized,
   }) {
     final _that = this;
@@ -269,10 +251,8 @@ extension VoucherShopStatePatterns on VoucherShopState {
         return initial();
       case _Loading() when loading != null:
         return loading();
-      case _Success() when success != null:
-        return success(_that.message);
       case _Loaded() when loaded != null:
-        return loaded(_that.data, _that.profile);
+        return loaded(_that.rewards);
       case _Error() when error != null:
         return error(_that.message);
       case _Unauthorized() when unauthorized != null:
@@ -285,7 +265,7 @@ extension VoucherShopStatePatterns on VoucherShopState {
 
 /// @nodoc
 
-class _Initial implements VoucherShopState {
+class _Initial implements RewardState {
   const _Initial();
 
   @override
@@ -299,13 +279,13 @@ class _Initial implements VoucherShopState {
 
   @override
   String toString() {
-    return 'VoucherShopState.initial()';
+    return 'RewardState.initial()';
   }
 }
 
 /// @nodoc
 
-class _Loading implements VoucherShopState {
+class _Loading implements RewardState {
   const _Loading();
 
   @override
@@ -319,81 +299,18 @@ class _Loading implements VoucherShopState {
 
   @override
   String toString() {
-    return 'VoucherShopState.loading()';
+    return 'RewardState.loading()';
   }
 }
 
 /// @nodoc
 
-class _Success implements VoucherShopState {
-  const _Success(this.message);
+class _Loaded implements RewardState {
+  const _Loaded(this.rewards);
 
-  final String message;
+  final RewardListModel rewards;
 
-  /// Create a copy of VoucherShopState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  _$SuccessCopyWith<_Success> get copyWith =>
-      __$SuccessCopyWithImpl<_Success>(this, _$identity);
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _Success &&
-            (identical(other.message, message) || other.message == message));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, message);
-
-  @override
-  String toString() {
-    return 'VoucherShopState.success(message: $message)';
-  }
-}
-
-/// @nodoc
-abstract mixin class _$SuccessCopyWith<$Res>
-    implements $VoucherShopStateCopyWith<$Res> {
-  factory _$SuccessCopyWith(_Success value, $Res Function(_Success) _then) =
-      __$SuccessCopyWithImpl;
-  @useResult
-  $Res call({String message});
-}
-
-/// @nodoc
-class __$SuccessCopyWithImpl<$Res> implements _$SuccessCopyWith<$Res> {
-  __$SuccessCopyWithImpl(this._self, this._then);
-
-  final _Success _self;
-  final $Res Function(_Success) _then;
-
-  /// Create a copy of VoucherShopState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  $Res call({
-    Object? message = null,
-  }) {
-    return _then(_Success(
-      null == message
-          ? _self.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _Loaded implements VoucherShopState {
-  const _Loaded(this.data, this.profile);
-
-  final VoucherShopListModel data;
-  final ProfileModel profile;
-
-  /// Create a copy of VoucherShopState
+  /// Create a copy of RewardState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
@@ -405,26 +322,25 @@ class _Loaded implements VoucherShopState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Loaded &&
-            (identical(other.data, data) || other.data == data) &&
-            (identical(other.profile, profile) || other.profile == profile));
+            (identical(other.rewards, rewards) || other.rewards == rewards));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, data, profile);
+  int get hashCode => Object.hash(runtimeType, rewards);
 
   @override
   String toString() {
-    return 'VoucherShopState.loaded(data: $data, profile: $profile)';
+    return 'RewardState.loaded(rewards: $rewards)';
   }
 }
 
 /// @nodoc
 abstract mixin class _$LoadedCopyWith<$Res>
-    implements $VoucherShopStateCopyWith<$Res> {
+    implements $RewardStateCopyWith<$Res> {
   factory _$LoadedCopyWith(_Loaded value, $Res Function(_Loaded) _then) =
       __$LoadedCopyWithImpl;
   @useResult
-  $Res call({VoucherShopListModel data, ProfileModel profile});
+  $Res call({RewardListModel rewards});
 }
 
 /// @nodoc
@@ -434,34 +350,29 @@ class __$LoadedCopyWithImpl<$Res> implements _$LoadedCopyWith<$Res> {
   final _Loaded _self;
   final $Res Function(_Loaded) _then;
 
-  /// Create a copy of VoucherShopState
+  /// Create a copy of RewardState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? data = null,
-    Object? profile = null,
+    Object? rewards = null,
   }) {
     return _then(_Loaded(
-      null == data
-          ? _self.data
-          : data // ignore: cast_nullable_to_non_nullable
-              as VoucherShopListModel,
-      null == profile
-          ? _self.profile
-          : profile // ignore: cast_nullable_to_non_nullable
-              as ProfileModel,
+      null == rewards
+          ? _self.rewards
+          : rewards // ignore: cast_nullable_to_non_nullable
+              as RewardListModel,
     ));
   }
 }
 
 /// @nodoc
 
-class _Error implements VoucherShopState {
+class _Error implements RewardState {
   const _Error(this.message);
 
-  final String? message;
+  final String message;
 
-  /// Create a copy of VoucherShopState
+  /// Create a copy of RewardState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
@@ -481,17 +392,17 @@ class _Error implements VoucherShopState {
 
   @override
   String toString() {
-    return 'VoucherShopState.error(message: $message)';
+    return 'RewardState.error(message: $message)';
   }
 }
 
 /// @nodoc
 abstract mixin class _$ErrorCopyWith<$Res>
-    implements $VoucherShopStateCopyWith<$Res> {
+    implements $RewardStateCopyWith<$Res> {
   factory _$ErrorCopyWith(_Error value, $Res Function(_Error) _then) =
       __$ErrorCopyWithImpl;
   @useResult
-  $Res call({String? message});
+  $Res call({String message});
 }
 
 /// @nodoc
@@ -501,24 +412,24 @@ class __$ErrorCopyWithImpl<$Res> implements _$ErrorCopyWith<$Res> {
   final _Error _self;
   final $Res Function(_Error) _then;
 
-  /// Create a copy of VoucherShopState
+  /// Create a copy of RewardState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? message = freezed,
+    Object? message = null,
   }) {
     return _then(_Error(
-      freezed == message
+      null == message
           ? _self.message
           : message // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
     ));
   }
 }
 
 /// @nodoc
 
-class _Unauthorized implements VoucherShopState {
+class _Unauthorized implements RewardState {
   const _Unauthorized();
 
   @override
@@ -532,7 +443,7 @@ class _Unauthorized implements VoucherShopState {
 
   @override
   String toString() {
-    return 'VoucherShopState.unauthorized()';
+    return 'RewardState.unauthorized()';
   }
 }
 

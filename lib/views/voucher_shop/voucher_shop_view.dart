@@ -4,6 +4,7 @@ import 'package:royal_spa_garden_mobile/model/profile_model.dart';
 import 'package:royal_spa_garden_mobile/model/voucher_list_model.dart';
 import 'package:royal_spa_garden_mobile/utils/token_utils.dart';
 import 'package:royal_spa_garden_mobile/views/voucher_shop/cubit/voucher_shop_cubit.dart';
+import 'package:royal_spa_garden_mobile/widget/voucher_card.dart';
 
 class VoucherShopView extends StatefulWidget {
   const VoucherShopView({super.key});
@@ -14,13 +15,6 @@ class VoucherShopView extends StatefulWidget {
 
 class _VoucherShopViewState extends State<VoucherShopView> {
   // Data dummy dari JSON
-
-  String _formatCurrency(int amount) {
-    return 'Rp ${amount.toString().replaceAllMapped(
-          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-          (Match m) => '${m[1]}.',
-        )}';
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,21 +54,29 @@ class _VoucherShopViewState extends State<VoucherShopView> {
             );
           },
           builder: (context, state) {
-            return state.maybeWhen(orElse: () {
-              return const Center(
-                child: Text('Terjadi kesalahan tak terduga.'),
-              );
-            }, loading: () {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }, error: (message) {
-              return Center(
-                child: Text('Error: $message'),
-              );
-            }, loaded: (data, profile) {
-              return _loaded(context, data, profile);
-            });
+            return state.maybeWhen(
+              orElse: () {
+                return const Center(
+                  child: Text('Terjadi kesalahan tak terduga.'),
+                );
+              },
+              loading: () {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
+              error: (message) {
+                return Center(
+                  child: Text('Error: $message'),
+                );
+              },
+              loaded: (data, profile) {
+                return _loaded(context, data, profile);
+              },
+              success: (message) {
+                return _success(context, message);
+              },
+            );
           },
         ));
   }
@@ -131,7 +133,7 @@ class _VoucherShopViewState extends State<VoucherShopView> {
             itemCount: data.data.length,
             itemBuilder: (context, index) {
               final voucher = data.data[index];
-              return _buildVoucherCard(voucher);
+              return _buildVoucherCard(voucher, context);
             },
           ),
         ),
@@ -139,237 +141,77 @@ class _VoucherShopViewState extends State<VoucherShopView> {
     );
   }
 
-  Widget _buildVoucherCard(Datum voucher) {
+  Widget _buildVoucherCard(Datum voucher, BuildContext context) {
     final points = int.parse(voucher.price);
     final discount = voucher.discountAmount;
     final expiryDate = voucher.expiryDate;
     final name = voucher.name;
-    return Card(
-      margin: const EdgeInsets.only(bottom: 16),
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: InkWell(
-        onTap: () {
-          _showRedeemDialog(name, points);
-        },
-        borderRadius: BorderRadius.circular(16),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              // Icon Voucher
-              Container(
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.pink[100]!, Colors.pink[200]!],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Icon(
-                  Icons.card_giftcard,
-                  size: 40,
-                  color: Colors.pink,
-                ),
-              ),
-              const SizedBox(width: 16),
+    return VoucherCard(
+      name: name,
+      discount: discount,
+      points: points.toString(),
+      voucherId: voucher.id.toString(),
+      expiryDate: expiryDate.toString(),
+      onTap: () {
+        _showRedeemDialog(name, points, voucher.id.toString(), context);
+      },
+    );
+  }
 
-              // Voucher Info
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.orange[100],
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.discount,
-                                size: 16,
-                                color: Colors.orange[700],
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                _formatCurrency(discount),
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.orange[700],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.access_time,
-                          size: 14,
-                          color: Colors.grey[600],
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          ' $expiryDate',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-
-              // Points Badge
-              Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.pink[400],
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Column(
-                      children: [
-                        Text(
-                          '$points',
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        const Text(
-                          'Poin',
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  const Icon(
-                    Icons.chevron_right,
-                    color: Colors.grey,
-                  ),
-                ],
-              ),
-            ],
+  Widget _success(BuildContext context, String message) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(
+            Icons.check_circle,
+            color: Colors.green,
+            size: 80,
           ),
-        ),
+          const SizedBox(height: 16),
+          Text(
+            message,
+            style: const TextStyle(
+              fontSize: 18,
+              color: Colors.black87,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 24),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('Kembali'),
+          ),
+        ],
       ),
     );
   }
 
-  void _showRedeemDialog(String voucherName, int points) {
+  void _showRedeemDialog(String voucherName, int points, String voucherId,
+      BuildContext parentContext) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          title: const Text(
-            'Tukar Voucher',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                  'Apakah Anda yakin ingin menukar poin untuk voucher ini?'),
-              const SizedBox(height: 16),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.pink[50],
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      voucherName,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Harga: $points Poin',
-                      style: TextStyle(
-                        color: Colors.pink[700],
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+          title: const Text('Konfirmasi Penukaran'),
+          content: Text(
+              'Apakah Anda yakin ingin menukar $points poin untuk voucher "$voucherName"?'),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(
-                'Batal',
-                style: TextStyle(color: Colors.grey[600]),
-              ),
+              onPressed: () {
+                Navigator.of(context).pop(); // Tutup dialog
+              },
+              child: const Text('Batal'),
             ),
             ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Berhasil menukar voucher: $voucherName'),
-                    backgroundColor: Colors.green,
-                    behavior: SnackBarBehavior.floating,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                );
+              onPressed: () async {
+                Navigator.of(context).pop(); // Tutup dialog
+                await parentContext
+                    .read<VoucherShopCubit>()
+                    .redeemVoucher(voucherId);
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.pink[400],
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
               child: const Text('Tukar'),
             ),
           ],

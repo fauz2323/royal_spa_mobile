@@ -11,6 +11,7 @@ import 'package:royal_spa_garden_mobile/views/login/login_view.dart';
 import 'package:royal_spa_garden_mobile/views/profile/profile_view.dart';
 import 'package:royal_spa_garden_mobile/views/qna/qna_view.dart';
 import 'package:royal_spa_garden_mobile/views/register/register_view.dart';
+import 'package:royal_spa_garden_mobile/views/reward/reward_view.dart';
 import 'package:royal_spa_garden_mobile/views/service/service_view.dart';
 import 'package:royal_spa_garden_mobile/views/service_detail/service_detail_view.dart';
 import 'package:royal_spa_garden_mobile/views/splash/splash_view.dart';
@@ -34,5 +35,6 @@ class RouteUtils {
     '/booking_page': (context) => const BookingPageView(),
     '/detail_order': (context) => const DetailOrderView(),
     '/voucher_shop': (context) => const VoucherShopView(),
+    '/reward': (context) => const RewardView(),
   };
 }

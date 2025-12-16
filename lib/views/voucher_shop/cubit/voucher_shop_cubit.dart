@@ -14,11 +14,14 @@ part 'voucher_shop_cubit.freezed.dart';
 class VoucherShopCubit extends Cubit<VoucherShopState> {
   VoucherShopCubit() : super(const VoucherShopState.loading());
   late String token;
+  late VoucherShopListModel voucherShopListModel;
+  late ProfileModel profileModel;
 
   initial() async {
     emit(const VoucherShopState.loading());
     try {
       token = await TokenUtils.getToken() ?? "";
+      print('VoucherShopCubit Token: $token');
       final req = await Future.wait([
         PointsNetwork().getVoucherShop(token),
         AuthNetwork().profile(token),
@@ -38,11 +41,36 @@ class VoucherShopCubit extends Cubit<VoucherShopState> {
         profileResponse.fold((l) {
           emit(VoucherShopState.error(l.message));
         }, (profileData) {
-          emit(VoucherShopState.loaded(voucherData, profileData));
+          profileModel = profileData;
+          voucherShopListModel = voucherData;
+          emit(VoucherShopState.loaded(voucherShopListModel, profileModel));
         });
       });
     } catch (e) {
       emit(VoucherShopState.error(e.toString()));
+    }
+  }
+
+  Future<void> redeemVoucher(String voucherId) async {
+    emit(const VoucherShopState.loading());
+    try {
+      final response = await PointsNetwork().reedemVoucher(token, voucherId);
+      return response.fold((l) {
+        if (l.statusCode == 401) {
+          emit(const VoucherShopState.unauthorized());
+          return;
+        }
+        if (l.statusCode == 400) {
+          emit(const VoucherShopState.error(
+              "Saldo poin tidak mencukupi untuk menukar voucher ini."));
+          return;
+        }
+        emit(VoucherShopState.error(l.message));
+      }, (r) {
+        emit(VoucherShopState.success(r.message));
+      });
+    } catch (e) {
+      return Future.error(e.toString());
     }
   }
 }
