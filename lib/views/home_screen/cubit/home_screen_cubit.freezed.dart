@@ -166,7 +166,7 @@ extension HomeScreenStatePatterns on HomeScreenState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(ProfileModel data)? loaded,
+    TResult Function(ProfileModel data, ListMissionModel missionData)? loaded,
     TResult Function(String? message)? error,
     TResult Function()? unauthorized,
     required TResult orElse(),
@@ -178,7 +178,7 @@ extension HomeScreenStatePatterns on HomeScreenState {
       case _Loading() when loading != null:
         return loading();
       case _Loaded() when loaded != null:
-        return loaded(_that.data);
+        return loaded(_that.data, _that.missionData);
       case _Error() when error != null:
         return error(_that.message);
       case _Unauthorized() when unauthorized != null:
@@ -205,7 +205,8 @@ extension HomeScreenStatePatterns on HomeScreenState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(ProfileModel data) loaded,
+    required TResult Function(ProfileModel data, ListMissionModel missionData)
+        loaded,
     required TResult Function(String? message) error,
     required TResult Function() unauthorized,
   }) {
@@ -216,7 +217,7 @@ extension HomeScreenStatePatterns on HomeScreenState {
       case _Loading():
         return loading();
       case _Loaded():
-        return loaded(_that.data);
+        return loaded(_that.data, _that.missionData);
       case _Error():
         return error(_that.message);
       case _Unauthorized():
@@ -242,7 +243,7 @@ extension HomeScreenStatePatterns on HomeScreenState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(ProfileModel data)? loaded,
+    TResult? Function(ProfileModel data, ListMissionModel missionData)? loaded,
     TResult? Function(String? message)? error,
     TResult? Function()? unauthorized,
   }) {
@@ -253,7 +254,7 @@ extension HomeScreenStatePatterns on HomeScreenState {
       case _Loading() when loading != null:
         return loading();
       case _Loaded() when loaded != null:
-        return loaded(_that.data);
+        return loaded(_that.data, _that.missionData);
       case _Error() when error != null:
         return error(_that.message);
       case _Unauthorized() when unauthorized != null:
@@ -307,9 +308,10 @@ class _Loading implements HomeScreenState {
 /// @nodoc
 
 class _Loaded implements HomeScreenState {
-  const _Loaded(this.data);
+  const _Loaded(this.data, this.missionData);
 
   final ProfileModel data;
+  final ListMissionModel missionData;
 
   /// Create a copy of HomeScreenState
   /// with the given fields replaced by the non-null parameter values.
@@ -323,15 +325,17 @@ class _Loaded implements HomeScreenState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Loaded &&
-            (identical(other.data, data) || other.data == data));
+            (identical(other.data, data) || other.data == data) &&
+            (identical(other.missionData, missionData) ||
+                other.missionData == missionData));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, data);
+  int get hashCode => Object.hash(runtimeType, data, missionData);
 
   @override
   String toString() {
-    return 'HomeScreenState.loaded(data: $data)';
+    return 'HomeScreenState.loaded(data: $data, missionData: $missionData)';
   }
 }
 
@@ -341,7 +345,7 @@ abstract mixin class _$LoadedCopyWith<$Res>
   factory _$LoadedCopyWith(_Loaded value, $Res Function(_Loaded) _then) =
       __$LoadedCopyWithImpl;
   @useResult
-  $Res call({ProfileModel data});
+  $Res call({ProfileModel data, ListMissionModel missionData});
 }
 
 /// @nodoc
@@ -356,12 +360,17 @@ class __$LoadedCopyWithImpl<$Res> implements _$LoadedCopyWith<$Res> {
   @pragma('vm:prefer-inline')
   $Res call({
     Object? data = null,
+    Object? missionData = null,
   }) {
     return _then(_Loaded(
       null == data
           ? _self.data
           : data // ignore: cast_nullable_to_non_nullable
               as ProfileModel,
+      null == missionData
+          ? _self.missionData
+          : missionData // ignore: cast_nullable_to_non_nullable
+              as ListMissionModel,
     ));
   }
 }
