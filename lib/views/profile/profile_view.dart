@@ -199,7 +199,12 @@ class ProfileView extends StatelessWidget {
             icon: Icons.logout,
             title: 'Logout',
             subtitle: 'Sign out of your account',
-            onTap: () {},
+            onTap: () async {
+              // Perform logout
+              await context.read<ProfileCubit>().logout();
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/login', (route) => false);
+            },
           ),
         ],
       ),

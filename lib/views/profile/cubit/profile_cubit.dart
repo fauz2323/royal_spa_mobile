@@ -37,4 +37,8 @@ class ProfileCubit extends Cubit<ProfileState> {
       emit(ProfileState.error(e.toString()));
     }
   }
+
+  Future<void> logout() async {
+    await TokenUtils.deleteAllTokens();
+  }
 }
