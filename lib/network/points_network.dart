@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
+import 'package:royal_spa_garden_mobile/model/history_point_model.dart';
 import 'package:royal_spa_garden_mobile/model/leaderboard_model.dart';
 import 'package:royal_spa_garden_mobile/model/network_model.dart';
 import 'package:http/http.dart' as http;
@@ -117,6 +118,31 @@ class PointsNetwork {
       NetworkModel(
           statusCode: response.statusCode,
           message: jsonData['message'] ?? 'Failed to redeem voucher'),
+    );
+  }
+
+  Future<Either<NetworkModel, HistoryPointModel>> historyPoints(
+    String token,
+  ) async {
+    final response = await http.get(
+      Uri.parse('https://rizky-firman.com/api/customer/points/history'),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    final jsonData = jsonDecode(response.body);
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final historyPointModel = HistoryPointModel.fromJson(jsonData);
+      return Right(historyPointModel);
+    }
+    return Left(
+      NetworkModel(
+          statusCode: response.statusCode,
+          message: jsonData['message'] ?? 'Failed to fetch history points'),
     );
   }
 }

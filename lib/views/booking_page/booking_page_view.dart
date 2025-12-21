@@ -425,6 +425,7 @@ class _BookingPageViewState extends State<BookingPageView> {
     );
 
     if (picked != null) {
+      print("date selected: $picked");
       return picked;
     }
     return null;

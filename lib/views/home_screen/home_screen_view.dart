@@ -84,21 +84,26 @@ class HomeScreenView extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(height: SizeUtils.getHeight(context) * 0.32),
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  width: SizeUtils.getWidth(context) * 0.9,
-                  height: SizeUtils.getHeight(context) * 0.08,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.green, width: 2),
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Hi, ${data.data.user.name}"),
-                      Text("${data.data.point.points} Points")
-                    ],
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/hisotry_point');
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(20),
+                    width: SizeUtils.getWidth(context) * 0.9,
+                    height: SizeUtils.getHeight(context) * 0.08,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.green, width: 2),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Hi, ${data.data.user.name}"),
+                        Text("${data.data.point.points} Points")
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(height: SizeUtils.getHeight(context) * 0.02),

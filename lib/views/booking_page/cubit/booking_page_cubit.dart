@@ -55,13 +55,17 @@ class BookingPageCubit extends Cubit<BookingPageState> {
   }
 
   submitData(String? notes) async {
+    if (selectedTime == null || selectedDate == null) {
+      return;
+    }
+
     emit(const BookingPageState.loading());
     try {
       final orderMakeResponse = await OrdersNetwork().orderMake(
           token,
           serviceData.data.id.toString(),
-          selectedDate!.toString().split(' ')[0],
           selectedTime!.toString().substring(10, 15),
+          selectedDate!.toString().split(' ')[0],
           notes ?? '');
 
       orderMakeResponse.fold(
