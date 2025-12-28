@@ -152,6 +152,7 @@ class _VoucherShopViewState extends State<VoucherShopView> {
       points: points.toString(),
       voucherId: voucher.id.toString(),
       expiryDate: expiryDate.toString(),
+      status: "",
       onTap: () {
         _showRedeemDialog(name, points, voucher.id.toString(), context);
       },

@@ -65,136 +65,141 @@ class HomeScreenView extends StatelessWidget {
 
   Widget _loaded(
       BuildContext context, ProfileModel data, ListMissionModel mission) {
-    return SingleChildScrollView(
-      child: Stack(
-        children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20),
+    return RefreshIndicator(
+      onRefresh: () async {
+        context.read<HomeScreenCubit>().initial();
+      },
+      child: SingleChildScrollView(
+        child: Stack(
+          children: [
+            ClipRRect(
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+              ),
+              child: Image.asset(
+                'assets/images/banner.png',
+                width: double.infinity,
+                height: SizeUtils.getHeight(context) * 0.28,
+                fit: BoxFit.cover,
+              ),
             ),
-            child: Image.asset(
-              'assets/images/banner.png',
-              width: double.infinity,
-              height: SizeUtils.getHeight(context) * 0.35,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Center(
-            child: Column(
-              children: [
-                SizedBox(height: SizeUtils.getHeight(context) * 0.32),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, '/hisotry_point');
-                  },
-                  child: Container(
+            Center(
+              child: Column(
+                children: [
+                  SizedBox(height: SizeUtils.getHeight(context) * 0.32),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/hisotry_point');
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(20),
+                      width: SizeUtils.getWidth(context) * 0.9,
+                      height: SizeUtils.getHeight(context) * 0.08,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.green, width: 2),
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Hi, ${data.data.user.name}"),
+                          Text("${data.data.point.points} Points")
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: SizeUtils.getHeight(context) * 0.02),
+                  Container(
                     padding: const EdgeInsets.all(20),
                     width: SizeUtils.getWidth(context) * 0.9,
-                    height: SizeUtils.getHeight(context) * 0.08,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.green, width: 2),
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    child: Column(
                       children: [
-                        Text("Hi, ${data.data.user.name}"),
-                        Text("${data.data.point.points} Points")
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            BottonIconWidget(
+                              title: "Services",
+                              icon: Icons.category_rounded,
+                              onTap: () {
+                                Navigator.pushNamed(context, '/services');
+                              },
+                            ),
+                            BottonIconWidget(
+                              title: "Leader Board",
+                              icon: Icons.leaderboard_rounded,
+                              onTap: () {
+                                Navigator.pushNamed(context, '/leaderboard');
+                              },
+                            ),
+                            BottonIconWidget(
+                              title: "History",
+                              icon: Icons.history_rounded,
+                              onTap: () {
+                                Navigator.pushNamed(context, '/history');
+                              },
+                            )
+                          ],
+                        ),
+                        const SizedBox(height: 30),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            BottonIconWidget(
+                              title: "Rewards",
+                              icon: Icons.redeem_rounded,
+                              onTap: () {
+                                Navigator.pushNamed(context, '/reward');
+                              },
+                            ),
+                            BottonIconWidget(
+                              title: "Voucher",
+                              icon: Icons.discount_rounded,
+                              onTap: () {
+                                Navigator.pushNamed(context, '/voucher_shop');
+                              },
+                            )
+                          ],
+                        )
                       ],
                     ),
                   ),
-                ),
-                SizedBox(height: SizeUtils.getHeight(context) * 0.02),
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  width: SizeUtils.getWidth(context) * 0.9,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          BottonIconWidget(
-                            title: "Services",
-                            icon: Icons.category_rounded,
-                            onTap: () {
-                              Navigator.pushNamed(context, '/services');
-                            },
-                          ),
-                          BottonIconWidget(
-                            title: "Leader Board",
-                            icon: Icons.leaderboard_rounded,
-                            onTap: () {
-                              Navigator.pushNamed(context, '/leaderboard');
-                            },
-                          ),
-                          BottonIconWidget(
-                            title: "History",
-                            icon: Icons.history_rounded,
-                            onTap: () {
-                              Navigator.pushNamed(context, '/history');
-                            },
-                          )
-                        ],
+                  const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.all(20),
+                      child: Text(
+                        "Upcoming Events",
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
-                      const SizedBox(height: 30),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          BottonIconWidget(
-                            title: "Rewards",
-                            icon: Icons.redeem_rounded,
-                            onTap: () {
-                              Navigator.pushNamed(context, '/reward');
-                            },
-                          ),
-                          BottonIconWidget(
-                            title: "Voucher",
-                            icon: Icons.discount_rounded,
-                            onTap: () {
-                              Navigator.pushNamed(context, '/voucher_shop');
-                            },
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Text(
-                      "Upcoming Events",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Column(
-                  children: mission.data.map((data) {
-                    return MissionCardWidget(
-                      title: data.mission.title,
-                      description: data.mission.description,
-                      points: data.mission.points,
-                      goal: data.mission.goal,
-                      progress: data.progress,
-                      status: data.status,
-                    );
-                  }).toList(),
-                )
-              ],
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Column(
+                    children: mission.data.map((data) {
+                      return MissionCardWidget(
+                        title: data.mission.title,
+                        description: data.mission.description,
+                        points: data.mission.points,
+                        goal: data.mission.goal,
+                        progress: data.progress,
+                        status: data.status,
+                      );
+                    }).toList(),
+                  )
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

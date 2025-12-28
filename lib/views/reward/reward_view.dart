@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:royal_spa_garden_mobile/model/reward_list_model.dart';
 import 'package:royal_spa_garden_mobile/utils/token_utils.dart';
 import 'package:royal_spa_garden_mobile/views/reward/cubit/reward_cubit.dart';
@@ -49,15 +52,40 @@ class RewardView extends StatelessWidget {
   }
 
   Widget _loaded(BuildContext context, RewardListModel data) {
-    return ListView.builder(
-      itemCount: data.data.length,
-      itemBuilder: (context, index) {
-        final reward = data.data[index];
-        return VoucherCard(
-          name: reward.voucher.name,
-          discount: reward.voucher.discountAmount,
-          voucherId: reward.voucher.id.toString(),
-          expiryDate: reward.voucher.expiryDate.toString(),
+    return RefreshIndicator(
+      onRefresh: () async {
+        context.read<RewardCubit>().initial();
+      },
+      child: ListView.builder(
+        itemCount: data.data.length,
+        itemBuilder: (context, index) {
+          final reward = data.data[index];
+          return VoucherCard(
+            name: reward.voucher.name,
+            discount: reward.voucher.discountAmount,
+            voucherId: reward.voucher.id.toString(),
+            expiryDate: reward.voucher.expiryDate.toString(),
+            status: reward.status,
+            onTap: () {
+              if (reward.status == "unused") {
+                _dialogBuilder(context, jsonEncode(reward.toJson()));
+              }
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  Future<void> _dialogBuilder(BuildContext context, String data) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Tunjukkan pada Admin untuk memakai Voucher'),
+          content: PrettyQrView.data(
+            data: data,
+          ),
         );
       },
     );
