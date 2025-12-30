@@ -5,6 +5,8 @@ import 'package:royal_spa_garden_mobile/model/service_spa_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../model/time_slot_list_model.dart';
+
 class ServiceSpaNetwork {
   Future<Either<NetworkModel, ServiceSpaModel>> getServices(
       String token) async {
@@ -52,6 +54,34 @@ class ServiceSpaNetwork {
     if (response.statusCode == 200 || response.statusCode == 201) {
       final serviceSpaDetailModel = ServiceSpaDetailModel.fromJson(jsonData);
       return Right(serviceSpaDetailModel);
+    }
+    return Left(
+      NetworkModel(
+          statusCode: response.statusCode,
+          message: jsonData['message'] ?? 'Unknown error'),
+    );
+  }
+
+
+  Future<Either<NetworkModel, TimeSlotListModel>> getAvailableTimeSlots(
+      String token, String date) async {
+    final response = await http.get(
+      Uri.parse(
+          'https://rizky-firman.com/api/customer/timeslot/available/$date'),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
+    final jsonData = jsonDecode(response.body);
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final timeSlotListModel = TimeSlotListModel.fromJson(jsonData);
+      return Right(timeSlotListModel);
     }
     return Left(
       NetworkModel(

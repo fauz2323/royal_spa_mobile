@@ -176,7 +176,7 @@ extension BookingPageStatePatterns on BookingPageState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(ServiceSpaDetailModel data, DateTime? selectedDate,
-            TimeOfDay? selectedTime)?
+            TimeOfDay? selectedTime, List<TimeSlot>? timeSlotByDuration)?
         loaded,
     TResult Function(String message)? error,
     TResult Function()? unauthorized,
@@ -190,7 +190,8 @@ extension BookingPageStatePatterns on BookingPageState {
       case _Loading() when loading != null:
         return loading();
       case _Loaded() when loaded != null:
-        return loaded(_that.data, _that.selectedDate, _that.selectedTime);
+        return loaded(_that.data, _that.selectedDate, _that.selectedTime,
+            _that.timeSlotByDuration);
       case _Error() when error != null:
         return error(_that.message);
       case _Unauthorized() when unauthorized != null:
@@ -219,8 +220,11 @@ extension BookingPageStatePatterns on BookingPageState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(ServiceSpaDetailModel data,
-            DateTime? selectedDate, TimeOfDay? selectedTime)
+    required TResult Function(
+            ServiceSpaDetailModel data,
+            DateTime? selectedDate,
+            TimeOfDay? selectedTime,
+            List<TimeSlot>? timeSlotByDuration)
         loaded,
     required TResult Function(String message) error,
     required TResult Function() unauthorized,
@@ -233,7 +237,8 @@ extension BookingPageStatePatterns on BookingPageState {
       case _Loading():
         return loading();
       case _Loaded():
-        return loaded(_that.data, _that.selectedDate, _that.selectedTime);
+        return loaded(_that.data, _that.selectedDate, _that.selectedTime,
+            _that.timeSlotByDuration);
       case _Error():
         return error(_that.message);
       case _Unauthorized():
@@ -262,7 +267,7 @@ extension BookingPageStatePatterns on BookingPageState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(ServiceSpaDetailModel data, DateTime? selectedDate,
-            TimeOfDay? selectedTime)?
+            TimeOfDay? selectedTime, List<TimeSlot>? timeSlotByDuration)?
         loaded,
     TResult? Function(String message)? error,
     TResult? Function()? unauthorized,
@@ -275,7 +280,8 @@ extension BookingPageStatePatterns on BookingPageState {
       case _Loading() when loading != null:
         return loading();
       case _Loaded() when loaded != null:
-        return loaded(_that.data, _that.selectedDate, _that.selectedTime);
+        return loaded(_that.data, _that.selectedDate, _that.selectedTime,
+            _that.timeSlotByDuration);
       case _Error() when error != null:
         return error(_that.message);
       case _Unauthorized() when unauthorized != null:
@@ -331,11 +337,22 @@ class _Loading implements BookingPageState {
 /// @nodoc
 
 class _Loaded implements BookingPageState {
-  const _Loaded(this.data, this.selectedDate, this.selectedTime);
+  const _Loaded(this.data, this.selectedDate, this.selectedTime,
+      final List<TimeSlot>? timeSlotByDuration)
+      : _timeSlotByDuration = timeSlotByDuration;
 
   final ServiceSpaDetailModel data;
   final DateTime? selectedDate;
   final TimeOfDay? selectedTime;
+  final List<TimeSlot>? _timeSlotByDuration;
+  List<TimeSlot>? get timeSlotByDuration {
+    final value = _timeSlotByDuration;
+    if (value == null) return null;
+    if (_timeSlotByDuration is EqualUnmodifiableListView)
+      return _timeSlotByDuration;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   /// Create a copy of BookingPageState
   /// with the given fields replaced by the non-null parameter values.
@@ -353,16 +370,18 @@ class _Loaded implements BookingPageState {
             (identical(other.selectedDate, selectedDate) ||
                 other.selectedDate == selectedDate) &&
             (identical(other.selectedTime, selectedTime) ||
-                other.selectedTime == selectedTime));
+                other.selectedTime == selectedTime) &&
+            const DeepCollectionEquality()
+                .equals(other._timeSlotByDuration, _timeSlotByDuration));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, data, selectedDate, selectedTime);
+  int get hashCode => Object.hash(runtimeType, data, selectedDate, selectedTime,
+      const DeepCollectionEquality().hash(_timeSlotByDuration));
 
   @override
   String toString() {
-    return 'BookingPageState.loaded(data: $data, selectedDate: $selectedDate, selectedTime: $selectedTime)';
+    return 'BookingPageState.loaded(data: $data, selectedDate: $selectedDate, selectedTime: $selectedTime, timeSlotByDuration: $timeSlotByDuration)';
   }
 }
 
@@ -375,7 +394,8 @@ abstract mixin class _$LoadedCopyWith<$Res>
   $Res call(
       {ServiceSpaDetailModel data,
       DateTime? selectedDate,
-      TimeOfDay? selectedTime});
+      TimeOfDay? selectedTime,
+      List<TimeSlot>? timeSlotByDuration});
 }
 
 /// @nodoc
@@ -392,6 +412,7 @@ class __$LoadedCopyWithImpl<$Res> implements _$LoadedCopyWith<$Res> {
     Object? data = null,
     Object? selectedDate = freezed,
     Object? selectedTime = freezed,
+    Object? timeSlotByDuration = freezed,
   }) {
     return _then(_Loaded(
       null == data
@@ -406,6 +427,10 @@ class __$LoadedCopyWithImpl<$Res> implements _$LoadedCopyWith<$Res> {
           ? _self.selectedTime
           : selectedTime // ignore: cast_nullable_to_non_nullable
               as TimeOfDay?,
+      freezed == timeSlotByDuration
+          ? _self._timeSlotByDuration
+          : timeSlotByDuration // ignore: cast_nullable_to_non_nullable
+              as List<TimeSlot>?,
     ));
   }
 }

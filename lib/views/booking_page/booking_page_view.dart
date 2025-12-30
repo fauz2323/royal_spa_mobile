@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:royal_spa_garden_mobile/model/service_spa_detail_model.dart';
+import 'package:royal_spa_garden_mobile/model/time_slot_list_model.dart';
+import 'package:royal_spa_garden_mobile/utils/time_utils.dart';
 import 'package:royal_spa_garden_mobile/utils/token_utils.dart';
 import 'package:royal_spa_garden_mobile/views/booking_page/cubit/booking_page_cubit.dart';
 import '../../model/service_spa_model.dart';
@@ -73,7 +76,13 @@ class _BookingPageViewState extends State<BookingPageView> {
             return state.when(
               initial: () => const SizedBox.shrink(),
               loading: () => const Center(child: CircularProgressIndicator()),
-              loaded: (data, date, time) => _loaded(context, data, date, time),
+              loaded: (data, date, time, timeSlot) => _loaded(
+                context,
+                data,
+                date,
+                time,
+                timeSlot,
+              ),
               error: (message) => Center(
                 child: Text(
                   'Error: $message',
@@ -117,8 +126,13 @@ class _BookingPageViewState extends State<BookingPageView> {
         ));
   }
 
-  Widget _loaded(BuildContext context, ServiceSpaDetailModel data,
-      DateTime? selectedDate, TimeOfDay? selectedTime) {
+  Widget _loaded(
+    BuildContext context,
+    ServiceSpaDetailModel data,
+    DateTime? selectedDate,
+    TimeOfDay? selectedTime,
+    List<TimeSlot>? timeSlot,
+  ) {
     return Form(
       key: _formKey,
       child: SingleChildScrollView(
@@ -158,26 +172,35 @@ class _BookingPageViewState extends State<BookingPageView> {
             const SizedBox(height: 12),
             _buildDateSelectionCard(context, selectedDate),
 
-            const SizedBox(height: 24),
+            if (selectedDate != null) ...{
+              const SizedBox(height: 24),
+              // Time Selection
+              _buildSectionTitle('Select Time'),
 
-            // Time Selection
-            _buildSectionTitle('Select Time'),
-            const SizedBox(height: 12),
-            _buildTimeSelectionCard(context, selectedTime),
+              const SizedBox(height: 12),
+              _buildTimeSelectionCard(
+                context,
+                selectedDate,
+                timeSlot,
+                selectedTime,
+              ),
+            },
 
-            const SizedBox(height: 24),
+            if (selectedTime != null) ...{
+              const SizedBox(height: 24),
 
-            // Notes Section
-            _buildSectionTitle('Additional Notes (Optional)'),
-            const SizedBox(height: 12),
-            _buildNotesField(),
+              // Notes Section
+              _buildSectionTitle('Additional Notes (Optional)'),
+              const SizedBox(height: 12),
+              _buildNotesField(),
 
-            const SizedBox(height: 32),
+              const SizedBox(height: 32),
 
-            // Book Now Button
-            _buildBookNowButton(context),
+              // Book Now Button
+              _buildBookNowButton(context),
 
-            const SizedBox(height: 20),
+              const SizedBox(height: 20),
+            },
           ],
         ),
       ),
@@ -265,7 +288,11 @@ class _BookingPageViewState extends State<BookingPageView> {
   }
 
   Widget _buildTimeSelectionCard(
-      BuildContext context, TimeOfDay? selectedTime) {
+    BuildContext context,
+    DateTime selectedDate,
+    List<TimeSlot>? timeSlot,
+    TimeOfDay? selectedTime,
+  ) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -285,7 +312,7 @@ class _BookingPageViewState extends State<BookingPageView> {
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
           onTap: () {
-            _selectTime(context).then((pickedTime) {
+            _selectTime(context, selectedDate, timeSlot).then((pickedTime) {
               if (pickedTime != null) {
                 context.read<BookingPageCubit>().setTime(pickedTime);
               }
@@ -312,7 +339,7 @@ class _BookingPageViewState extends State<BookingPageView> {
                 Expanded(
                   child: Text(
                     selectedTime != null
-                        ? selectedTime.format(context)
+                        ? selectedTime.to24HourString()
                         : 'Select Time',
                     style: const TextStyle(
                       fontSize: 16,
@@ -431,15 +458,68 @@ class _BookingPageViewState extends State<BookingPageView> {
     return null;
   }
 
-  Future<TimeOfDay?> _selectTime(BuildContext context) async {
-    final TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
+  Future<TimeOfDay?> _selectTime(
+    BuildContext context,
+    DateTime selectedDate,
+    List<TimeSlot>? timeSlot,
+  ) async {
+    if (timeSlot == null) return null;
+    final TimeSlot? picked = await showTimeSlotPickerDialog(
+      context,
+      timeSlot,
     );
 
     if (picked != null) {
-      return picked;
+      final time = picked.timeStart.split(':');
+      return TimeOfDay(hour: int.parse(time[0]), minute: int.parse(time[1]));
     }
     return null;
+  }
+
+  Future<TimeSlot?> showTimeSlotPickerDialog(
+    BuildContext context,
+    List<TimeSlot> slots,
+  ) async {
+    return showDialog<TimeSlot>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Row(
+            children: [
+              Text('Pilih Jadwal'),
+            ],
+          ),
+          content: SizedBox(
+            width: double.maxFinite,
+            height: 320,
+            child: Scrollbar(
+              thumbVisibility: true, // Always show scrollbar [web:154]
+              child: ListView.separated(
+                padding: const EdgeInsets.only(bottom: 16),
+                itemCount: slots.length,
+                separatorBuilder: (_, __) => const Divider(height: 1),
+                itemBuilder: (context, index) {
+                  final slot = slots[index];
+                  return ListTile(
+                    leading: const Icon(Icons.access_time, size: 20),
+                    title: Text('${slot.timeStart} - ${slot.timeEnd}'),
+                    trailing: index < slots.length - 1
+                        ? const Icon(Icons.arrow_forward_ios, size: 16)
+                        : null,
+                    onTap: () => Navigator.of(context).pop(slot),
+                  );
+                },
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(null),
+              child: const Text('Cancel'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

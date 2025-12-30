@@ -6,6 +6,7 @@ import 'package:royal_spa_garden_mobile/views/service_detail/cubit/service_detai
 
 class ServiceDetailView extends StatelessWidget {
   ServiceDetailView({super.key});
+
   late ServiceDetailArgument args;
 
   @override
@@ -286,7 +287,11 @@ class ServiceDetailView extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      _buildInfoRow(Icons.schedule, 'Durasi', '90 Menit'),
+                      _buildInfoRow(
+                        Icons.schedule,
+                        'Durasi',
+                        '${data.data.duration} Menit',
+                      ),
                       const SizedBox(height: 12),
                       _buildInfoRow(
                           Icons.location_on, 'Lokasi', 'Royal Spa Center'),
