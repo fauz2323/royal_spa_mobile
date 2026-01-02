@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
@@ -36,7 +38,10 @@ class HomeScreenView extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 3.0),
                   child: FloatingActionButton(
                     onPressed: () {
-                      _dialogBuilder(context, data.data.user.email);
+                      _dialogBuilder(
+                        context,
+                        jsonEncode(data.data.user.toJson()),
+                      );
                     },
                     backgroundColor: Colors.white,
                     child: const Icon(
@@ -209,7 +214,7 @@ class HomeScreenView extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('QR Code'),
+          title: const Text('QR Code User'),
           content: PrettyQrView.data(
             data: data,
           ),
