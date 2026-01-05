@@ -175,6 +175,8 @@ class _MissionInfo extends StatelessWidget {
             const SizedBox(height: 8),
             Text(mission.description),
             const SizedBox(height: 16),
+            Text('Points: ${mission.points} pts'),
+            const SizedBox(height: 16),
             Row(
               children: [
                 Text('Goal: ${mission.goal}',
