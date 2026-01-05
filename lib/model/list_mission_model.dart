@@ -87,6 +87,8 @@ class Mission {
   final int goal;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final String expiredDate;
+  final String services;
 
   Mission({
     required this.id,
@@ -96,6 +98,8 @@ class Mission {
     required this.goal,
     required this.createdAt,
     required this.updatedAt,
+    required this.expiredDate,
+    required this.services,
   });
 
   factory Mission.fromJson(Map<String, dynamic> json) => Mission(
@@ -106,6 +110,8 @@ class Mission {
         goal: json["goal"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
+        expiredDate: json["expired_date"],
+        services: json["services"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
@@ -116,5 +122,7 @@ class Mission {
         "goal": goal,
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
+        "expired_date": expiredDate,
+        "services": services,
       };
 }

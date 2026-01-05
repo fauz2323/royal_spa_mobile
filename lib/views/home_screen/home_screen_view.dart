@@ -197,6 +197,13 @@ class HomeScreenView extends StatelessWidget {
                         goal: data.mission.goal,
                         progress: data.progress,
                         status: data.status,
+                        tapCallback: () {
+                          Navigator.pushNamed(
+                            context,
+                            '/mission_detail',
+                            arguments: data.mission,
+                          );
+                        },
                       );
                     }).toList(),
                   )

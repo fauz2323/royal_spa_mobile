@@ -12,7 +12,7 @@ String serviceSpaModelToJson(ServiceSpaModel data) =>
 
 class ServiceSpaModel {
   final bool success;
-  final List<Datum> data;
+  final List<SpaService> data;
 
   ServiceSpaModel({
     required this.success,
@@ -22,7 +22,7 @@ class ServiceSpaModel {
   factory ServiceSpaModel.fromJson(Map<String, dynamic> json) =>
       ServiceSpaModel(
         success: json["success"],
-        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+        data: List<SpaService>.from(json["data"].map((x) => SpaService.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -31,7 +31,7 @@ class ServiceSpaModel {
       };
 }
 
-class Datum {
+class SpaService {
   final int id;
   final String uuid;
   final String name;
@@ -44,7 +44,7 @@ class Datum {
   final DateTime createdAt;
   final DateTime updatedAt;
 
-  Datum({
+  SpaService({
     required this.id,
     required this.uuid,
     required this.name,
@@ -58,7 +58,7 @@ class Datum {
     required this.updatedAt,
   });
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory SpaService.fromJson(Map<String, dynamic> json) => SpaService(
         id: json["id"],
         uuid: json["uuid"],
         name: json["name"],

@@ -8,6 +8,7 @@ import 'package:royal_spa_garden_mobile/views/history/history_view.dart';
 import 'package:royal_spa_garden_mobile/views/home/home_view.dart';
 import 'package:royal_spa_garden_mobile/views/leaderboard/leaderboard_view.dart';
 import 'package:royal_spa_garden_mobile/views/login/login_view.dart';
+import 'package:royal_spa_garden_mobile/views/mission/detail_mission_view.dart';
 import 'package:royal_spa_garden_mobile/views/point_history/point_history_views.dart';
 import 'package:royal_spa_garden_mobile/views/profile/profile_view.dart';
 import 'package:royal_spa_garden_mobile/views/qna/qna_view.dart';
@@ -38,5 +39,9 @@ class RouteUtils {
     '/voucher_shop': (context) => const VoucherShopView(),
     '/reward': (context) => const RewardView(),
     '/hisotry_point': (context) => const PointHistoryViews(),
+    '/mission_detail': (context) {
+
+      return const DetailMissionView();
+    },
   };
 }
