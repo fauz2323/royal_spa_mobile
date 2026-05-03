@@ -116,7 +116,11 @@ class ProfileView extends StatelessWidget {
           GestureDetector(
             onTap: () {
               // Navigate to edit profile page
-              Navigator.pushNamed(context, '/edit_profile');
+              Navigator.pushNamed(
+                context,
+                '/edit_profile',
+                arguments: user.data.user,
+              );
             },
             child: Container(
               width: double.infinity,

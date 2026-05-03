@@ -96,4 +96,75 @@ class AuthNetwork {
           message: jsonData['message'] ?? 'Failed to fetch profile'),
     );
   }
+
+  Future<Either<NetworkModel, Map<String, dynamic>>> updateProfile({
+    required String token,
+    required String name,
+    required String email,
+    required String phone,
+  }) async {
+    Map body = {
+      'name': name,
+      'email': email,
+      'phone': phone,
+    };
+
+    final response = await http.post(
+      Uri.parse('https://rizky-firman.com/api/customer/update-profile'),
+      body: body,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
+    final jsonData = jsonDecode(response.body);
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return Right(jsonData);
+    }
+    return Left(
+      NetworkModel(
+          statusCode: response.statusCode,
+          message: jsonData['message'] ?? 'Failed to redeem voucher'),
+    );
+  }
+
+  Future<Either<NetworkModel, Map<String, dynamic>>> updatePassword({
+    required String token,
+    required String current_password,
+    required String new_password,
+  }) async {
+    Map body = {
+      'current_password': current_password,
+      'new_password': new_password,
+    };
+
+    final response = await http.post(
+      Uri.parse('https://rizky-firman.com/api/customer/update-password'),
+      body: body,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
+    final jsonData = jsonDecode(response.body);
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return Right(jsonData);
+    }
+    return Left(
+      NetworkModel(
+          statusCode: response.statusCode,
+          message: jsonData['message'] ?? 'Failed to redeem voucher'),
+    );
+  }
+
 }

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:royal_spa_garden_mobile/network/auth_network.dart';
+
+import '../../model/profile_model.dart';
+import '../../utils/token_utils.dart';
 
 class EditProfileView extends StatefulWidget {
   const EditProfileView({super.key});
@@ -12,6 +16,7 @@ class EditProfileView extends StatefulWidget {
 class _EditProfileViewState extends State<EditProfileView> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
   final _currentPasswordController = TextEditingController();
   final _newPasswordController = TextEditingController();
@@ -22,22 +27,38 @@ class _EditProfileViewState extends State<EditProfileView> {
   bool _obscureConfirmPassword = true;
   bool _isLoading = false;
 
+  final _authNetwork = AuthNetwork();
+  String token = '';
+  User? user;
+
   @override
   void initState() {
     super.initState();
+    _fetchToken();
+  }
+
+  void _fetchToken() async {
+    token = await TokenUtils.getToken() ?? '';
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    user = ModalRoute.of(context)!.settings.arguments as User;
     _loadCurrentProfile();
   }
 
   void _loadCurrentProfile() {
-    // TODO: Load current user profile data
-    // For now, using placeholder data
-    _nameController.text = "John Doe";
-    _phoneController.text = "081234567890";
+    _nameController.text = user?.name ?? '';
+    _emailController.text = user?.email ?? '';
+    _phoneController.text = user?.phone ?? '';
   }
 
   @override
   void dispose() {
     _nameController.dispose();
+    _emailController.dispose();
     _phoneController.dispose();
     _currentPasswordController.dispose();
     _newPasswordController.dispose();
@@ -65,21 +86,6 @@ class _EditProfileViewState extends State<EditProfileView> {
           icon: const Icon(Icons.arrow_back_ios, color: Colors.black87),
           onPressed: () => Navigator.pop(context),
         ),
-        actions: [
-          TextButton(
-            onPressed: _isLoading ? null : _saveProfile,
-            child: Text(
-              'Save',
-              style: GoogleFonts.poppins(
-                color: _isLoading
-                    ? Colors.grey
-                    : const Color.fromRGBO(166, 138, 100, 1),
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -88,14 +94,13 @@ class _EditProfileViewState extends State<EditProfileView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Profile Picture Section
-              _buildProfilePictureSection(),
-              const SizedBox(height: 32),
-
               // Personal Information Section
               _buildSectionHeader('Personal Information'),
               const SizedBox(height: 16),
               _buildPersonalInfoCard(),
+              const SizedBox(height: 24),
+              // Save Button
+              _buildSaveProfileButton(),
               const SizedBox(height: 24),
 
               // Change Password Section
@@ -110,52 +115,6 @@ class _EditProfileViewState extends State<EditProfileView> {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildProfilePictureSection() {
-    return Center(
-      child: Stack(
-        children: [
-          CircleAvatar(
-            radius: 60,
-            backgroundColor: Colors.grey[300],
-            backgroundImage:
-                const AssetImage('assets/images/default_avatar.png'),
-            onBackgroundImageError: (exception, stackTrace) {
-              // Handle image loading error
-            },
-            child: const Icon(
-              Icons.person,
-              size: 60,
-              color: Colors.grey,
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: GestureDetector(
-              onTap: _changeProfilePicture,
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: const Color.fromRGBO(166, 138, 100, 1),
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Colors.white,
-                    width: 2,
-                  ),
-                ),
-                child: const Icon(
-                  Icons.camera_alt,
-                  color: Colors.white,
-                  size: 20,
-                ),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -210,6 +169,38 @@ class _EditProfileViewState extends State<EditProfileView> {
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter your full name';
+              }
+              if (value.length < 2) {
+                return 'Name must be at least 2 characters';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 20),
+
+          // Email Field
+          TextFormField(
+            controller: _emailController,
+            decoration: InputDecoration(
+              labelText: 'Email',
+              hintText: 'Enter your email',
+              prefixIcon: const Icon(Icons.email_outlined),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Colors.grey[300]!),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide:
+                    const BorderSide(color: Color.fromRGBO(166, 138, 100, 1)),
+              ),
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter your email';
               }
               if (value.length < 2) {
                 return 'Name must be at least 2 characters';
@@ -415,9 +406,40 @@ class _EditProfileViewState extends State<EditProfileView> {
     );
   }
 
-  Widget _buildSaveButton() {
+  Widget _buildSaveProfileButton() {
     return ElevatedButton(
       onPressed: _isLoading ? null : _saveProfile,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color.fromRGBO(166, 138, 100, 1),
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        elevation: 2,
+      ),
+      child: _isLoading
+          ? const SizedBox(
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              ),
+            )
+          : Text(
+              'Save Profile',
+              style: GoogleFonts.poppins(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+    );
+  }
+
+  Widget _buildSaveButton() {
+    return ElevatedButton(
+      onPressed: _isLoading ? null : _savePassword,
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color.fromRGBO(166, 138, 100, 1),
         foregroundColor: Colors.white,
@@ -446,97 +468,6 @@ class _EditProfileViewState extends State<EditProfileView> {
     );
   }
 
-  void _changeProfilePicture() {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return SafeArea(
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Change Profile Picture',
-                  style: GoogleFonts.poppins(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildPhotoOption(
-                      icon: Icons.camera_alt,
-                      label: 'Camera',
-                      onTap: () {
-                        Navigator.pop(context);
-                        _pickImageFromCamera();
-                      },
-                    ),
-                    _buildPhotoOption(
-                      icon: Icons.photo_library,
-                      label: 'Gallery',
-                      onTap: () {
-                        Navigator.pop(context);
-                        _pickImageFromGallery();
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildPhotoOption({
-    required IconData icon,
-    required String label,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: const BoxDecoration(
-              color: Color.fromRGBO(166, 138, 100, 0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              icon,
-              size: 32,
-              color: const Color.fromRGBO(166, 138, 100, 1),
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            style: GoogleFonts.poppins(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _pickImageFromCamera() {
-    // TODO: Implement camera image picker
-    _showSnackBar('Camera functionality will be implemented');
-  }
-
-  void _pickImageFromGallery() {
-    // TODO: Implement gallery image picker
-    _showSnackBar('Gallery functionality will be implemented');
-  }
-
   void _saveProfile() async {
     if (!_formKey.currentState!.validate()) {
       return;
@@ -547,16 +478,68 @@ class _EditProfileViewState extends State<EditProfileView> {
     });
 
     try {
-      // TODO: Implement actual profile saving logic
-      await Future.delayed(const Duration(seconds: 2)); // Simulate API call
+      final result = await _authNetwork.updateProfile(
+        token: token,
+        name: _nameController.text,
+        email: _emailController.text,
+        phone: _phoneController.text,
+      );
 
       if (mounted) {
-        _showSnackBar('Profile updated successfully', isSuccess: true);
-        Navigator.pop(context, true); // Return true to indicate success
+        result.fold(
+          (error) => _showSnackBar(error.message),
+          (_) {
+            _showSnackBar('Profile updated successfully', isSuccess: true);
+          },
+        );
       }
     } catch (e) {
       if (mounted) {
         _showSnackBar('Failed to update profile. Please try again.');
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  void _savePassword() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    if (_newPasswordController.text != _confirmPasswordController.text) {
+      setState(() {
+        _isLoading = false;
+      });
+      _showSnackBar('Password Baru dan Konfirmasi Password Baru tidak cocok');
+    }
+
+    try {
+      final result = await _authNetwork.updatePassword(
+        token: token,
+        current_password: _currentPasswordController.text,
+        new_password: _newPasswordController.text,
+      );
+
+      if (mounted) {
+        result.fold(
+          (error) => _showSnackBar(error.message),
+          (_) {
+            _showSnackBar('Profile updated successfully', isSuccess: true);
+          },
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        _showSnackBar('Failed to update password. Please try again.');
       }
     } finally {
       if (mounted) {
