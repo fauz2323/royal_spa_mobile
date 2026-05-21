@@ -5,6 +5,7 @@ import 'package:royal_spa_garden_mobile/model/voucher_list_model.dart';
 import 'package:royal_spa_garden_mobile/utils/token_utils.dart';
 import 'package:royal_spa_garden_mobile/views/voucher_shop/cubit/voucher_shop_cubit.dart';
 import 'package:royal_spa_garden_mobile/widget/voucher_card.dart';
+import 'package:royal_spa_garden_mobile/widget/voucher_card_disabled.dart';
 
 class VoucherShopView extends StatefulWidget {
   const VoucherShopView({super.key});
@@ -133,7 +134,7 @@ class _VoucherShopViewState extends State<VoucherShopView> {
             itemCount: data.data.length,
             itemBuilder: (context, index) {
               final voucher = data.data[index];
-              return _buildVoucherCard(voucher, context);
+              return _buildVoucherCard(voucher, profile, context);
             },
           ),
         ),
@@ -141,22 +142,35 @@ class _VoucherShopViewState extends State<VoucherShopView> {
     );
   }
 
-  Widget _buildVoucherCard(Datum voucher, BuildContext context) {
+  Widget _buildVoucherCard(
+      Datum voucher, ProfileModel profile, BuildContext context) {
+    final userPoints = profile.data.point.points;
     final points = int.parse(voucher.price);
     final discount = voucher.discountAmount;
     final expiryDate = voucher.expiryDate;
     final name = voucher.name;
-    return VoucherCard(
-      name: name,
-      discount: discount,
-      points: points.toString(),
-      voucherId: voucher.id.toString(),
-      expiryDate: expiryDate.toString(),
-      status: "",
-      onTap: () {
-        _showRedeemDialog(name, points, voucher.id.toString(), context);
-      },
-    );
+    if (userPoints > points) {
+      return VoucherCard(
+        name: name,
+        discount: discount,
+        points: points.toString(),
+        voucherId: voucher.id.toString(),
+        expiryDate: expiryDate.toString(),
+        status: "",
+        onTap: () {
+          _showRedeemDialog(name, points, voucher.id.toString(), context);
+        },
+      );
+    } else {
+      return VoucherCardDisabled(
+        name: name,
+        discount: discount,
+        points: points.toString(),
+        voucherId: voucher.id.toString(),
+        expiryDate: expiryDate.toString(),
+        status: "",
+      );
+    }
   }
 
   Widget _success(BuildContext context, String message) {

@@ -36,41 +36,29 @@ class LeaderboardsModel {
 }
 
 class Datum {
-  final int id;
   final int userId;
   final int points;
   final String status;
-  final DateTime createdAt;
-  final DateTime updatedAt;
   final User user;
 
   Datum({
-    required this.id,
     required this.userId,
     required this.points,
     required this.status,
-    required this.createdAt,
-    required this.updatedAt,
     required this.user,
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-        id: json["id"],
         userId: json["user_id"],
-        points: json["points"],
-        status: json["status"],
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
+        points: int.tryParse(json["total_points"]) ?? 0,
+        status: json["status"] ?? "",
         user: User.fromJson(json["user"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
         "user_id": userId,
-        "points": points,
+        "total_points": points,
         "status": status,
-        "created_at": createdAt.toIso8601String(),
-        "updated_at": updatedAt.toIso8601String(),
         "user": user.toJson(),
       };
 }
