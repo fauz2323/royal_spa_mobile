@@ -166,16 +166,16 @@ class ProfileView extends StatelessWidget {
             },
           ),
           _buildDivider(),
-          ProfileMenuWidget(
-            isLogout: false,
-            icon: Icons.notifications,
-            title: 'Notifications',
-            subtitle: 'Manage your notifications',
-            onTap: () {
-              // Navigate to notifications settings
-            },
-          ),
-          _buildDivider(),
+          // ProfileMenuWidget(
+          //   isLogout: false,
+          //   icon: Icons.notifications,
+          //   title: 'Notifications',
+          //   subtitle: 'Manage your notifications',
+          //   onTap: () {
+          //     // Navigate to notifications settings
+          //   },
+          // ),
+          // _buildDivider(),
           ProfileMenuWidget(
             isLogout: false,
             icon: Icons.help,

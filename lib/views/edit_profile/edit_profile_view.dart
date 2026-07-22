@@ -99,9 +99,9 @@ class _EditProfileViewState extends State<EditProfileView> {
               const SizedBox(height: 16),
               _buildPersonalInfoCard(),
               const SizedBox(height: 24),
-              // Save Button
-              _buildSaveProfileButton(),
-              const SizedBox(height: 24),
+              // // Save Button
+              // _buildSaveProfileButton(),
+              // const SizedBox(height: 24),
 
               // Change Password Section
               _buildSectionHeader('Change Password'),

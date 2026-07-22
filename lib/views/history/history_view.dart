@@ -97,7 +97,7 @@ class HistoryView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Rp. ${data.data[index].spaService.price}',
+                    'Rp. ${(data.data[index].spaService.price).replaceAll('.00', '')}',
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
